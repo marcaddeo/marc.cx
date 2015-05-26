@@ -1,4 +1,4 @@
-# MarcCx
+# marc.cx
 
 To start your new Phoenix application:
 
