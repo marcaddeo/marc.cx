@@ -37,7 +37,8 @@ defmodule MarcCx.Mixfile do
       {:phoenix_live_reload, "~> 0.4", only: :dev},
       {:cowboy, "~> 1.0"},
       {:earmark, "~> 0.1.8"},
-      {:timex, "~> 0.13.4"}
+      {:timex, "~> 0.13.4"},
+      {:exrm, "~> 0.16.0"},
    ]
   end
 end
