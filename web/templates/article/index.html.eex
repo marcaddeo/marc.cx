@@ -1,0 +1,5 @@
+<article>
+  <div class="container">
+    <%= raw @content %>
+  </div>
+</article>

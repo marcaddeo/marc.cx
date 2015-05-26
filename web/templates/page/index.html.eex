@@ -1,0 +1,14 @@
+<div class="container">
+  <section class="intro">
+    <h1>Code, Learnings, and Rambling</h1>
+  </section>
+  <section class="articles">
+  <%= for article <- @articles do %>
+    <article>
+      <h3><a href="<%= article_path(@conn, :index, article.slug) %>"><%= article.title %></a></h3>
+      <span>Published <time><%= article.published %></time></span>
+      <p><%= article.excerpt %></p>
+    </article>
+  <%= end %>
+  </section>
+</div>
