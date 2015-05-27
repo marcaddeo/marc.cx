@@ -18,7 +18,7 @@ defmodule MarcCx.Mixfile do
   def application do
     [mod: {MarcCx, []},
      applications: [:phoenix, :phoenix_html, :cowboy, :logger,
-                    :phoenix_ecto, :postgrex]]
+                    :phoenix_ecto, :postgrex, :timex, :earmark]]
   end
 
   # Specifies which paths to compile per environment
