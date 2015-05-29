@@ -1,13 +1,65 @@
 $max-width: 730px;
 $solarized-dark-bg: #002b36;
 $open-sans: 'Open Sans', sans-serif;
+$link-color: #FD4040;
+$selection-color: lighten($link-color, 12);
 
-header .title {
-    font-size: 36px;
-    margin: 20px 0 10px 0;
-    font-weight: 500;
-    line-height: 1.1;
-    display: block;
+a {
+    color: $link-color;
+
+    &:hover, &:active, &:focus {
+        color: $link-color;
+    }
+
+    &:focus {
+        outline-color: $link-color;
+    }
+}
+
+::selection {
+    background: $selection-color;
+}
+::-moz-selection {
+    background: $selection-color;
+}
+
+header {
+    .title {
+        font-size: 36px;
+        margin: 20px 0 10px 0;
+        font-weight: 500;
+        line-height: 1.1;
+        display: block;
+        color: #777;
+
+        &:hover, &:active, &:focus {
+            color: #777;
+            text-decoration: none;
+        }
+    }
+
+    .nav-pills > li > a {
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+
+        &:hover {
+            border-bottom: 2px solid $link-color;
+            background-color: initial;
+        }
+    }
+
+    .nav-pills > li.active > a {
+        color: $link-color;
+        background-color: initial;
+        border-bottom: 2px solid $link-color;
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+
+        &:hover {
+            color: $link-color;
+            background-color: initial;
+        }
+    }
 }
 
 .intro {
@@ -31,11 +83,22 @@ header .title {
 }
 
 article {
-    font-size: 16px;
-    font-family: $open-sans;
-
     h1 {
         font-weight: bold;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        font-family: $open-sans;
+        color: #2E2E2E;
+    }
+
+    p {
+        color: #3A4145;
+        font-family: $open-sans;
+        font-size: 1.75rem;
+        line-height: 1.75em;
+        letter-spacing: 0.01rem;
+        text-align: justify;
     }
 }
 
@@ -50,6 +113,7 @@ article {
         border: none;
         border-radius: 0;
         background: $solarized-dark-bg;
+        margin: 15px 0;
     }
 
     pre code {
