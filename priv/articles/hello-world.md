@@ -113,7 +113,7 @@ quickly get "good" with Elixir and Phoenix and make some interesting things.
 
 
 [Elixir Programming Language]: http://elixir-lang.org/
-[Phoenix Framework]: http://www.phoenixframework.org/http://www.phoenixframework.org/
+[Phoenix Framework]: http://www.phoenixframework.org/
 [Markdown]: http://en.wikipedia.org/wiki/Markdown
 [repo]: https://github.com/marcaddeo/marc.cx
 [Dave Thomas']: http://pragdave.me/
