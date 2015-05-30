@@ -126,3 +126,17 @@ article {
         font-family: 'Inconsolata';
     }
 }
+
+footer {
+    padding-bottom: 15px;
+    background-color: #fdfdfd;
+
+    hr {
+        margin-bottom: 10px;
+    }
+
+    .contact-me {
+        display: inline-block;
+        margin: 6px 0;
+    }
+}
