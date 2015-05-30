@@ -1,6 +1,11 @@
 <div class="container">
   <section class="intro">
     <h1>Code, Learnings, and Rambling</h1>
+    <div class="byline">
+      <address class="author">
+        By <a rel="author" href="<%= page_path(@conn, :index) %>">Marc Addeo</a>
+      </address>
+    </div>
   </section>
   <section class="articles">
   <%= for article <- @articles do %>
