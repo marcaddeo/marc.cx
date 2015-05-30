@@ -1,6 +1,7 @@
 defmodule MarcCx.PageController do
   use MarcCx.Web, :controller
   use Timex
+  alias MarcCx.Markdown
 
   plug :action
 
@@ -32,22 +33,6 @@ defmodule MarcCx.PageController do
     %{metadata | :published => "#{month} #{day}, #{year}"}
   end
 
-  defp parse_metadata(["__START_META__" | tail], metadata) do
-    parse_metadata(tail, metadata)
-  end
-  defp parse_metadata(["__END_META__" | _], metadata) do
-    format_date(metadata)
-  end
-  defp parse_metadata([head | tail], metadata) do
-    [key, value] = String.split(head, ":", parts: 2, trim: true)
-    parse_metadata(tail, Dict.put(metadata, String.to_atom(key), String.strip(value)))
-  end
-
-  defp parse_metadata(content) when is_list(content) do
-    [slug | content] = content
-    parse_metadata(content, %{:slug => slug})
-  end
-
   defp read_articles([], articles), do: articles
   defp read_articles([file | files], articles) do
     path = Application.app_dir(:marc_cx, "priv/articles/#{file}")
@@ -65,6 +50,20 @@ defmodule MarcCx.PageController do
     path = Application.app_dir(:marc_cx, "priv/articles")
     {:ok, files} = File.ls(path)
 
-    for article <- read_articles(files), do: parse_metadata(article)
+    articles = read_articles(files)
+
+    articles = files
+    |> read_articles
+    |> Enum.map(fn (article) ->
+      [slug | content] = article
+
+      metadata = content
+      |> Markdown.get_metadata
+      |> format_date
+
+      Map.put(metadata, :slug, slug)
+    end)
+
+    articles
   end
 end
