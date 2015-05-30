@@ -47,10 +47,8 @@ defmodule MarcCx.PageController do
   end
 
   defp get_articles() do
-    path = Application.app_dir(:marc_cx, "priv/articles")
-    {:ok, files} = File.ls(path)
-
-    articles = files
+    Application.app_dir(:marc_cx, "priv/articles")
+    |> File.ls!
     |> read_articles
     |> Enum.map(fn (article) ->
       [slug | content] = article
@@ -61,7 +59,5 @@ defmodule MarcCx.PageController do
 
       Map.put(metadata, :slug, slug)
     end)
-
-    articles
   end
 end
