@@ -137,7 +137,12 @@ article {
         letter-spacing: 0.01rem;
         text-align: justify;
     }
+
+    #disqus_thread {
+        margin-top: 50px;
+    }
 }
+
 
 .container {
     max-width: $max-width;
