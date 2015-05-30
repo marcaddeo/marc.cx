@@ -29,7 +29,7 @@ config :logger, :console, format: "[$level] $message\n"
 # Configure your database
 config :marc_cx, MarcCx.Repo,
   adapter: Ecto.Adapters.Postgres,
-  username: "postgres",
-  password: "postgres",
+  username: "marc",
+  password: "",
   database: "marc_cx_dev",
   size: 10 # The amount of database connections in the pool

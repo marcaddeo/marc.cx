@@ -12,7 +12,7 @@ config :logger, level: :warn
 # Configure your database
 config :marc_cx, MarcCx.Repo,
   adapter: Ecto.Adapters.Postgres,
-  username: "postgres",
-  password: "postgres",
+  username: "marc",
+  password: "",
   database: "marc_cx_test",
   size: 1 # Use a single connection for transactional tests
