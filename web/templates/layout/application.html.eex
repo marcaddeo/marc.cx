@@ -52,7 +52,7 @@
         <hr />
         <div class="container">
           <div class="pull-left">
-            <a href="http://www.kopimi.com/kopimi">
+            <a target="_blank" href="http://www.kopimi.com/kopimi">
               <img width="32" src="<%= static_path(@conn, "/images/kopimi.svg") %>" />
             </a>
           </div>
