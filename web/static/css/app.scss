@@ -1,7 +1,7 @@
 $max-width: 730px;
 $solarized-dark-bg: #002b36;
 $open-sans: 'Open Sans', sans-serif;
-$link-color: #FD4040;
+$link-color: #fd4040;
 $selection-color: lighten($link-color, 12);
 
 a {
@@ -90,12 +90,12 @@ article {
 
     h1, h2, h3, h4, h5, h6 {
         font-family: $open-sans;
-        color: #2E2E2E;
+        color: #2e2e2e;
         margin-bottom: 15px;
     }
 
     p {
-        color: #3A4145;
+        color: #3a4145;
         font-family: $open-sans;
         font-size: 1.65rem;
         line-height: 1.75em;
