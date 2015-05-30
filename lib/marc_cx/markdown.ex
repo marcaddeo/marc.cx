@@ -26,7 +26,7 @@ defmodule MarcCx.Markdown do
     [key, value] = String.split(head, ":", parts: 2, trim: true)
     parse_metadata(tail, Dict.put(metadata, String.to_atom(key), String.strip(value)))
   end
-  defp parse_metadata(content) when is_list(content) do
+  defp parse_metadata(content) when content |> is_list do
     parse_metadata(content, %{})
   end
 end
