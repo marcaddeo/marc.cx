@@ -4,6 +4,15 @@ $open-sans: 'Open Sans', sans-serif;
 $link-color: #fd4040;
 $selection-color: lighten($link-color, 12);
 
+html, body {
+    height: 100%;
+}
+
+.wrapper {
+    position: relative;
+    min-height: 100%;
+}
+
 a {
     color: $link-color;
 
@@ -74,6 +83,8 @@ header {
 
 .articles {
     article {
+        padding-bottom: 0;
+
         span {
             color: #c7c7c7;
             margin-bottom: 5px;
@@ -84,6 +95,8 @@ header {
 }
 
 article {
+    padding-bottom: 100px;
+
     h1 {
         font-weight: bold;
     }
@@ -128,13 +141,20 @@ article {
 }
 
 footer {
-    padding-bottom: 15px;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 67px;
     background-color: #fdfdfd;
 
     hr {
-        margin-bottom: 10px;
+        margin: 0;
+        padding: 20px 0 0 0;
     }
 
+    .container {
+        padding-bottom: 15px;
+    }
     .contact-me {
         display: inline-block;
         margin: 6px 0;

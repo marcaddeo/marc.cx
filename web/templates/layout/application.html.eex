@@ -29,41 +29,42 @@
   </head>
 
   <body>
-    <header>
-      <div class="container">
-        <div class="header">
-          <nav>
-            <ul class="nav nav-pills pull-right">
-            <%= for item <- navigation(@conn) do %>
-              <li role="presentation" <%= if item.active do %>class="active"<% end %>>
-                <a <%= if item[:target] do %>target="<%= item.target %>" <% end %>href="<%= item.href %>"><%= item.text %></a>
-              </li>
-            <% end %>
-          </nav>
-          <a href="<%= page_path(@conn, :index) %>" class="title text-muted">marc.cx</a>
+    <div class="wrapper">
+      <header>
+        <div class="container">
+          <div class="header">
+            <nav>
+              <ul class="nav nav-pills pull-right">
+              <%= for item <- navigation(@conn) do %>
+                <li role="presentation" <%= if item.active do %>class="active"<% end %>>
+                  <a <%= if item[:target] do %>target="<%= item.target %>" <% end %>href="<%= item.href %>"><%= item.text %></a>
+                </li>
+              <% end %>
+            </nav>
+            <a href="<%= page_path(@conn, :index) %>" class="title text-muted">marc.cx</a>
+          </div>
         </div>
-      </div>
-    </header>
+      </header>
 
-    <%= @inner %>
+      <%= @inner %>
 
-    <footer>
-      <hr />
-      <div class="container">
-        <div class="pull-left">
-          <a href="http://www.kopimi.com/kopimi">
-            <img width="32" src="<%= static_path(@conn, "/images/kopimi.svg") %>" />
-          </a>
+      <footer>
+        <hr />
+        <div class="container">
+          <div class="pull-left">
+            <a href="http://www.kopimi.com/kopimi">
+              <img width="32" src="<%= static_path(@conn, "/images/kopimi.svg") %>" />
+            </a>
+          </div>
+          <div class="pull-right">
+            <a class="contact-me" href="mailto:hi@marc.cx">hi@marc.cx</a>
+          </div>
         </div>
-        <div class="pull-right">
-          <a class="contact-me" href="mailto:hi@marc.cx">hi@marc.cx</a>
-        </div>
-      </div>
-    </footer>
+      </footer>
+    </div>
 
     <script src="<%= static_path(@conn, "/js/vendor.js") %>"></script>
     <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
     <script>require("web/static/js/app")</script>
   </body>
 </html>
-
