@@ -12,7 +12,7 @@ a {
     }
 
     &:focus {
-        outline-color: $link-color;
+        outline: none;
     }
 }
 
@@ -35,6 +35,7 @@ header {
         &:hover, &:active, &:focus {
             color: #777;
             text-decoration: none;
+            border: none;
         }
     }
 
@@ -42,9 +43,9 @@ header {
         border-bottom-left-radius: 0;
         border-bottom-right-radius: 0;
 
-        &:hover {
+        &:hover, &:active, &:focus {
             border-bottom: 2px solid $link-color;
-            background-color: initial;
+            background-color: white;
         }
     }
 
@@ -55,9 +56,9 @@ header {
         border-bottom-left-radius: 0;
         border-bottom-right-radius: 0;
 
-        &:hover {
+        &:hover, &:active {
             color: $link-color;
-            background-color: initial;
+            background-color: white;
         }
     }
 }
