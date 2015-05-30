@@ -2,6 +2,7 @@ $max-width: 730px;
 $solarized-dark-bg: #002b36;
 $open-sans: 'Open Sans', sans-serif;
 $link-color: #fd4040;
+$subtext: #c7c7c7;
 $selection-color: lighten($link-color, 12);
 
 html, body {
@@ -85,7 +86,7 @@ header {
 .articles {
     article {
         span {
-            color: #c7c7c7;
+            color: $subtext;
             margin-bottom: 5px;
             display: inline-block;
             font-size: 13px;
