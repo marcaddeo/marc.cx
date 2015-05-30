@@ -115,14 +115,18 @@ header {
 }
 
 article {
-    h1 {
-        font-weight: bold;
-    }
-
     h1, h2, h3, h4, h5, h6 {
         font-family: $open-sans;
-        color: #2e2e2e;
         margin-bottom: 15px;
+        color: #2e2e2e;
+    }
+
+    h1 {
+        font-weight: bold;
+        color: #df0202;
+        text-align: center;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #ededed;
     }
 
     p {
