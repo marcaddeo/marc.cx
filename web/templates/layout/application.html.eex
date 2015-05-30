@@ -36,7 +36,7 @@
             <ul class="nav nav-pills pull-right">
             <%= for item <- navigation(@conn) do %>
               <li role="presentation" <%= if item.active do %>class="active"<% end %>>
-                <a href="<%= item.href %>"><%= item.text %></a>
+                <a <%= if item[:target] do %>target="<%= item.target %>" <% end %>href="<%= item.href %>"><%= item.text %></a>
               </li>
             <% end %>
           </nav>

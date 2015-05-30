@@ -5,7 +5,7 @@ defmodule MarcCx.LayoutView do
     nav = [
       {:index, %{:text => "Home", :href => page_path(conn, :index), :active => false}},
       #{:about, %{:text => "About", :href => page_path(conn, :about), :active => false}},
-      {:github, %{:text => "Github", :href => "https://github.com/marcaddeo", :active => false}},
+      {:github, %{:text => "Github", :href => "https://github.com/marcaddeo", :active => false, :target => "_blank"}},
     ]
 
     active = case conn.path_info do
