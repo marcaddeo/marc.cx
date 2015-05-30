@@ -50,8 +50,6 @@ defmodule MarcCx.PageController do
     path = Application.app_dir(:marc_cx, "priv/articles")
     {:ok, files} = File.ls(path)
 
-    articles = read_articles(files)
-
     articles = files
     |> read_articles
     |> Enum.map(fn (article) ->
