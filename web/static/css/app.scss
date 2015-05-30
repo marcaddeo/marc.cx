@@ -36,17 +36,24 @@ a {
 
 header {
     .title {
-        font-size: 36px;
         margin: 20px 0 10px 0;
         font-weight: 500;
         line-height: 1.1;
         display: block;
         color: #777;
+        font-size: 28px;
 
         &:hover, &:active, &:focus {
             color: #777;
             text-decoration: none;
             border: none;
+        }
+
+        &::first-letter {
+            font-size: 36px;
+            color: $link-color;
+            text-transform: uppercase;
+            font-family: $open-sans;
         }
     }
 
