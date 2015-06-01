@@ -13,6 +13,11 @@ defmodule MarcCx.PageController do
     render conn, "about.html"
   end
 
+  defp format_dates(articles) do
+    Enum.map(articles, fn (article) ->
+      format_date(article)
+    end)
+  end
   defp format_date(%{:published => published} = metadata) do
     {:ok, date} = DateFormat.parse(published, "{M}/{D}/{YYYY}")
 
@@ -30,7 +35,9 @@ defmodule MarcCx.PageController do
       _   -> "#{day}th"
     end
 
-    %{metadata | :published => "#{month} #{day}, #{year}"}
+    timestamp = Date.convert(date, :secs)
+
+    Map.put(%{metadata | :published => "#{month} #{day}, #{year}"}, :timestamp, timestamp)
   end
 
   defp read_articles([], articles), do: articles
@@ -46,18 +53,38 @@ defmodule MarcCx.PageController do
     read_articles(files, [])
   end
 
-  defp get_articles() do
+  defp get_article_files() do
     Application.app_dir(:marc_cx, "priv/articles")
     |> File.ls!
+  end
+
+  defp get_articles() do
+    get_article_files
     |> read_articles
-    |> Enum.map(fn (article) ->
+    |> extract_metadata
+    |> format_dates
+    |> sort_by_date :desc
+  end
+
+  defp extract_metadata(articles) do
+    Enum.map(articles, fn (article) ->
       [slug | content] = article
 
-      metadata = content
-      |> Markdown.get_metadata
-      |> format_date
+      metadata = Markdown.get_metadata(content)
 
       Map.put(metadata, :slug, slug)
+    end)
+  end
+
+  defp sort_by_date(articles, :desc) do
+    Enum.sort(articles, fn (a, b) ->
+      a.timestamp > b.timestamp
+    end)
+  end
+
+  defp sort_by_date(articles, :asc) do
+    Enum.sort(articles, fn (a, b) ->
+      a.timestamp < b.timestamp
     end)
   end
 end
