@@ -63,6 +63,7 @@ defmodule MarcCx.PageController do
     |> read_articles
     |> extract_metadata
     |> format_dates
+    |> published
     |> sort_by_date :desc
   end
 
@@ -79,6 +80,12 @@ defmodule MarcCx.PageController do
   defp sort_by_date(articles, :desc) do
     Enum.sort(articles, fn (a, b) ->
       a.timestamp > b.timestamp
+    end)
+  end
+
+  defp published(articles) do
+    Enum.filter(articles, fn (article) ->
+      article[:status] === "published"
     end)
   end
 
