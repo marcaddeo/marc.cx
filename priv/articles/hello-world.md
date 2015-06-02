@@ -1,5 +1,6 @@
 __START_META__
 title: Hello World
+status: published
 published: 05/26/2015
 excerpt: In which I make the first blog article on my new site. A short introduction to my blog, and the technologies behind it.
 __END_META__
