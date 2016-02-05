@@ -1,6 +1,6 @@
 __START_META__
 title: Auto Renewing SSL Certs on NGINX with Let's Encrypt
-status: draft
+status: published
 published: 12/12/2015
 excerpt: How I'm using Let's Encrypt for free auto renewing SSL certificates on NGINX
 __END_META__
