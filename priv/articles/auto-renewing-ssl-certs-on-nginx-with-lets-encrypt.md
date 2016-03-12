@@ -219,6 +219,7 @@ the webserver once a cert has been successfully renewed. Defaults to
 ```bash
 #!/bin/bash
 LE_EMAIL="${LE_EMAIL:-devops@$HOST}"
+SIMP_LE=/usr/local/sbin/simp_le
 SIMP_LE_CERT_PATH="${SIMP_LE_CERT_PATH:-/var/cert}"
 SIMP_LE_CONF_FILE_NAME="${SIMP_LE_CONF_FILE_NAME:-.simp_le_renew.json}"
 SIMP_LE_WEB_SERVER_RESTART_COMMAND="${SIMP_LE_WEB_SERVER_RESTART_COMMAND:-service nginx restart}"
@@ -241,14 +242,15 @@ function get_conf_files {
 
 function renew_cert() {
     cd $1
-    simp_le \
+    ($SIMP_LE \
         --email $LE_EMAIL \
         -f account_key.json \
         -f chain.pem \
         -f fullchain.pem \
+        -f cert.pem \
         -f key.pem \
         -d $2:$3 \
-    && $SIMP_LE_WEB_SERVER_RESTART_COMMAND
+    && $SIMP_LE_WEB_SERVER_RESTART_COMMAND) || true
 }
 
 function renew_certs {
@@ -270,7 +272,7 @@ renew_certs
 This is the entry I have in my crontab to check and renew certs everyday at `2am`:
 
 ```bash
-0 2 * * * LE_EMAIL=hi@marc.cx /usr/local/sbin/simp_le_renew
+0 2 * * * LE_EMAIL=hi@marc.cx /usr/local/sbin/simp_le_renew >> /var/log/simp_le_renew.log 2>&1 || true
 ```
 
 ## Closing Words
