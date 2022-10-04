@@ -2,16 +2,30 @@
 </script>
 
 <footer>
-  <div class="copyright">
+  <div>
     &copy; 2015-2022 Marc Addeo
   </div>
-  <div class="contact">
+  <div>
     <a href="mailto:hi@marc.cx">hi@marc.cx</a>
   </div>
 </footer>
 
-<style>
+<style lang="scss">
   footer {
     grid-area: footer;
+    display: grid;
+    grid-template-areas: "footer-left footer-right";
+    align-items: end;
+    margin: 1rem 0;
+  }
+
+  div {
+    grid-area: footer-left;
+    color: $color-subtext;
+  }
+
+  div + div {
+    grid-area: footer-right;
+    text-align: right;
   }
 </style>

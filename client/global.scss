@@ -1,0 +1,54 @@
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code&family=Fira+Sans&family=Roboto&display=swap');
+
+$color-brand: #FD4040;
+$color-brand: #857ef1;
+$color-link: $color-brand;
+$color-selection: lighten($color-brand, 12);
+$color-heading-dark: #1A1A1A;
+$color-text: #363636;
+$color-subtext: #C7C7C7;
+$font-fira-code: 'Fira Code', monospace;
+$font-fira-sans: 'Fira Sans', sans-serif;
+$font-roboto: 'Roboto', sans-serif;
+
+:global {
+  ::selection {
+    background-color: $color-selection;
+  }
+
+  a {
+    color: $color-link;
+    text-decoration: none;
+
+    &:hover, &:active, &:focus {
+      color: $color-link;
+    }
+
+    &:focus {
+      outline: none
+    }
+  }
+
+  body {
+    display: grid;
+    grid-gap: 10px;
+    grid-template-columns: 730px;
+    grid-template-rows: .1fr 2fr .1fr;
+    grid-template-areas:
+      "header"
+      "main"
+      "footer";
+    justify-content: center;
+
+    font-family: $font-fira-sans;
+    font-size: 16px;
+
+    color: $color-text;
+  }
+
+  @media screen and (max-width: 730px) {
+    body {
+      grid-template-columns: 90%;
+    }
+  }
+}

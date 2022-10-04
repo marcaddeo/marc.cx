@@ -3,5 +3,5 @@
 
 <h1>Projects go here</h1>
 
-<style>
+<style lang="scss">
 </style>

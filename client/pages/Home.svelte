@@ -1,17 +1,107 @@
 <script lang="ts">
+  import ArticleList from "../components/ArticleList.svelte"
 </script>
 
-<article>
-  <h3><a href="/article/auto-renewing-ssl-certs-on-nginx-with-lets-encrypt">Auto Renewing SSL Certs on NGINX with Let's Encrypt</a></h3>
-  <span>Published <time datetime="2015-12-12">December 12th 2015</time></span>
-  <p>How I'm using Let's Encrypt for free auto renewing SSL certificates on NGINX</p>
-</article>
+<div class="container">
+  <section class="greeting-section">
+    <div class="greeting-container">
+      <div class="greeting">Nice to meet you; I'm</div>
+      <div class="name"><span>👨🏻‍💻</span>Marc</div>
+    </div>
+    <div class="intro">
+      <p>
+        I'm a back-end web developer that does stuff and what-not, here's some
+        more words that make me sound good and what not. I like to code with
+        PHP, Rust, JavaScript/TypeScript, Svelte, and other shit and what-not.
+        Maybe this is long enough now?
+      </p>
+    </div>
+  </section>
 
-<article>
-  <h3><a href="/article/hello-world">Hello World</a></h3>
-  <span>Published <time datetime="2015-05-26">May 26th 2015</time></span>
-  <p>In which I make the first blog article on my new site. A short introduction to my blog, and the technologies behind it.</p>
-</article>
+  <section class="article-list">
+    <h2><span>Recent Articles</span></h2>
 
-<style>
+    <ArticleList articleCount="3" />
+  </section>
+</div>
+
+<style lang="scss">
+  .container {
+    display: grid;
+    grid-template-areas:
+      "greeting"
+      "articles";
+    grid-template-rows: .9fr 1fr;
+  }
+
+  .greeting-section {
+    grid-area: greeting;
+    display: grid;
+    grid-template-columns: .9fr;
+    grid-template-rows: .5fr .5fr;;
+    grid-template-areas:
+      "greeting"
+      "intro";
+    justify-content: center;
+    justify-items: center;
+    text-align: center;
+    font-family: $font-roboto;
+
+    .greeting-container {
+      grid-area: greeting;
+      margin: 3rem 0;
+      color: $color-heading-dark;
+
+      .greeting {
+        font-family: $font-fira-code;
+        letter-spacing: -2px;
+        font-size: 2rem;
+      }
+
+      .name {
+        font-size: 4rem;
+      }
+
+      .name span {
+        margin-right: 1.25rem;
+      }
+    }
+
+    .intro {
+      grid-area: intro;
+      font-family: $font-fira-code;
+    }
+  }
+
+  .article-list {
+    grid-area: articles;
+
+    h2 {
+      display: grid;
+      grid-template-areas:
+        "text gradient";
+      grid-template-columns: .4fr .6fr;
+      padding: .3rem 0;
+      font-family: $font-fira-code;
+
+      span {
+        grid-area: text;
+        text-align: center;
+        background: $color-brand;
+        color: white;
+      }
+
+      &:after {
+        content: "";
+        grid-area: gradient;
+        background: repeating-linear-gradient(
+          90deg,
+          $color-brand,
+          $color-brand 2px,
+          transparent 0,
+          transparent 10px
+        );
+      }
+    }
+  }
 </style>

@@ -1,23 +1,64 @@
 <script lang="ts">
-  import { Router } from "svelte-routing";
-  import NavLink from "./NavLink.svelte"
+  import { Router, Link, link } from "svelte-routing";
 
   export let url: string = "";
 </script>
 
 <header>
-  <span>~/marc</span>
-  <nav>
-    <Router url="{url}">
-      <NavLink to="/">Home</NavLink>
-      <NavLink to="projects">Projects</NavLink>
-    </Router>
-    <a target="_blank" href="https://github.com/marcaddeo">GitHub</a>
-  </nav>
+  <Router url="{url}">
+    <span><a href="/" use:link>~/marc</a></span>
+    <nav>
+      <Link to="/">Home</Link>
+      <Link to="articles">Articles</Link>
+      <Link to="projects">Projects</Link>
+      <a target="_blank" href="https://github.com/marcaddeo">GitHub</a>
+      <a target="_blank" href="https://www.linkedin.com/in/marc-addeo-6793159b/">LinkedIn</a>
+    </nav>
+  </Router>
 </header>
 
-<style>
+<style lang="scss">
   header {
     grid-area: header;
+    display: grid;
+    grid-template-areas: "header-left header-right";
+    margin: 1rem 0;
+    font-family: $font-fira-code;
+  }
+
+  span {
+    grid-area: header-left;
+    color: $color-brand;
+    font-size: 1rem;
+  }
+
+  nav {
+    grid-area: header-right;
+    text-align: right;
+    text-transform: lowercase;
+  }
+
+  nav :global(a) {
+    padding: 0 .6rem;
+
+    &:last-of-type {
+      padding-right: 0;
+    }
+  }
+
+  nav :global(a[aria-current]) {
+    padding: 0;
+
+    &:before {
+      content: '[';
+    }
+
+    &:after {
+      content: ']';
+    }
+  }
+
+  @media screen and (max-width: 600px) {
+    /* @todo make the nav not suck... */
   }
 </style>
