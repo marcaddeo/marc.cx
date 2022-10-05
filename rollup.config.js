@@ -121,7 +121,7 @@ export default [
   },
   // SSR Entrypoint.
   {
-    input: 'client/ssr.js',
+    input: 'client/ssrEntry.js',
     output: {
       sourcemap: false,
       format: 'iife',
@@ -134,7 +134,6 @@ export default [
       }),
       resolve(),
       commonjs(),
-      typescript(),
       production && terser()
     ],
   },
