@@ -125,7 +125,7 @@ export default [
     output: {
       sourcemap: false,
       format: 'iife',
-      name: 'SSR',
+      name: 'ssrEntry',
       file: 'static/build/ssrEntry.js'
     },
     plugins: [
