@@ -1,9 +1,10 @@
-#[macro_use] extern crate rocket;
-use std::path::PathBuf;
-use rocket::fs::{FileServer, relative};
+#[macro_use]
+extern crate rocket;
+use rocket::fs::{relative, FileServer};
 use rocket::response::content;
 use ssr_rs::Ssr;
 use std::fs::read_to_string;
+use std::path::PathBuf;
 
 #[get("/<path..>", rank = 11)]
 fn index(path: PathBuf) -> content::RawHtml<String> {
