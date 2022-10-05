@@ -8,14 +8,6 @@
   import Projects from "./pages/Projects.svelte"
 
   export let url: string = "";
-
-  // Scroll to the top of the page after routing to new page.
-  /* history.pushState = new Proxy(history.pushState, { */
-  /*  apply (target, thisArg, argumentsList) { */
-  /*    Reflect.apply(target, thisArg, argumentsList); */
-  /*    scrollTo(0, 0); */
-  /*  } */
- /* }); */
 </script>
 
 <Header {url} />
