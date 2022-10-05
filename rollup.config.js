@@ -115,7 +115,9 @@ export default [
       css({ output: 'bundle.css' }),
       resolve(),
       commonjs(),
-      typescript(),
+      typescript({
+        sourceMap: false,
+      }),
       production && terser()
     ],
   },
