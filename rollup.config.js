@@ -6,6 +6,7 @@ import { terser } from 'rollup-plugin-terser';
 import sveltePreprocess from 'svelte-preprocess';
 import typescript from '@rollup/plugin-typescript';
 import css from 'rollup-plugin-css-only';
+import html from 'rollup-plugin-html';
 
 const production = !process.env.ROLLUP_WATCH;
 
@@ -30,59 +31,111 @@ function serve() {
   };
 }
 
-export default {
-  input: 'client/main.ts',
-  output: {
-    sourcemap: true,
-    format: 'iife',
-    name: 'app',
-    file: 'static/build/bundle.js'
-  },
-  plugins: [
-    svelte({
-      preprocess: sveltePreprocess({
-        sourceMap: !production,
-        scss: {
-          prependData: `@import 'client/global.scss';`
-        },
+export default [
+  // Browser bundle.
+  {
+    input: 'client/main.ts',
+    output: {
+      sourcemap: true,
+      format: 'iife',
+      name: 'app',
+      file: 'static/build/bundle.js'
+    },
+    plugins: [
+      svelte({
+        preprocess: sveltePreprocess({
+          sourceMap: !production,
+          scss: {
+            prependData: `@import 'client/global.scss';`
+          },
+        }),
+        compilerOptions: {
+          // enable run-time checks when not in production
+          dev: !production,
+          hydratable: true,
+        }
       }),
-      compilerOptions: {
-        // enable run-time checks when not in production
-        dev: !production
-      }
-    }),
-    // we'll extract any component CSS out into
-    // a separate file - better for performance
-    css({ output: 'bundle.css' }),
+      // we'll extract any component CSS out into
+      // a separate file - better for performance
+      css({ output: 'bundle.css' }),
 
-    // If you have external dependencies installed from
-    // npm, you'll most likely need these plugins. In
-    // some cases you'll need additional configuration -
-    // consult the documentation for details:
-    // https://github.com/rollup/plugins/tree/master/packages/commonjs
-    resolve({
-      browser: true,
-      dedupe: ['svelte']
-    }),
-    commonjs(),
-    typescript({
-      sourceMap: !production,
-      inlineSources: !production
-    }),
+      // If you have external dependencies installed from
+      // npm, you'll most likely need these plugins. In
+      // some cases you'll need additional configuration -
+      // consult the documentation for details:
+      // https://github.com/rollup/plugins/tree/master/packages/commonjs
+      resolve({
+        browser: true,
+        dedupe: ['svelte']
+      }),
+      commonjs(),
+      typescript({
+        sourceMap: !production,
+        inlineSources: !production
+      }),
 
-    // In dev mode, call `npm run start` once
-    // the bundle has been generated
-    !production && serve(),
+      // In dev mode, call `npm run start` once
+      // the bundle has been generated
+      !production && serve(),
 
-    // Watch the `static` directory and refresh the
-    // browser on changes when not in production
-    !production && livereload('static'),
+      // Watch the `static` directory and refresh the
+      // browser on changes when not in production
+      !production && livereload('static'),
 
-    // If we're building for production (npm run build
-    // instead of npm run dev), minify
-    production && terser()
-  ],
-  watch: {
-    clearScreen: false
-  }
-};
+      // If we're building for production (npm run build
+      // instead of npm run dev), minify
+      production && terser()
+    ],
+    watch: {
+      clearScreen: false
+    }
+  },
+  // SSR Bundle.
+  {
+    input: 'client/App.svelte',
+    output: {
+      exports: 'default',
+      sourcemap: false,
+      format: 'cjs',
+      name: 'app',
+      file: 'static/build/ssr.js'
+    },
+    plugins: [
+      svelte({
+        preprocess: sveltePreprocess({
+          scss: {
+            prependData: `@import 'client/global.scss';`
+          },
+        }),
+        compilerOptions: {
+          generate: 'ssr',
+          hydratable: true,
+        }
+      }),
+      css({ output: 'bundle.css' }),
+      resolve(),
+      commonjs(),
+      typescript(),
+      production && terser()
+    ],
+  },
+  // SSR Entrypoint.
+  {
+    input: 'client/ssr.js',
+    output: {
+      sourcemap: false,
+      format: 'iife',
+      name: 'SSR',
+      file: 'static/build/ssrEntry.js'
+    },
+    plugins: [
+      html({
+        include: 'static/**/*.html'
+      }),
+      resolve(),
+      commonjs(),
+      typescript(),
+      production && terser()
+    ],
+  },
+];
