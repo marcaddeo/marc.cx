@@ -126,14 +126,11 @@ export default [
     input: 'client/ssrEntry.js',
     output: {
       sourcemap: false,
-      format: 'iife',
+      format: 'umd',
       name: 'ssrEntry',
-      file: 'static/build/ssrEntry.js'
+      file: 'static/build/ssrEntry.js',
     },
     plugins: [
-      html({
-        include: 'static/**/*.html'
-      }),
       resolve(),
       commonjs(),
       production && terser()
