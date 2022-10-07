@@ -6,7 +6,7 @@ import { terser } from 'rollup-plugin-terser';
 import sveltePreprocess from 'svelte-preprocess';
 import typescript from '@rollup/plugin-typescript';
 import css from 'rollup-plugin-css-only';
-import html from 'rollup-plugin-html';
+import externalGlobals from 'rollup-plugin-external-globals';
 
 const production = !process.env.ROLLUP_WATCH;
 
@@ -98,7 +98,7 @@ export default [
       sourcemap: false,
       format: 'cjs',
       name: 'app',
-      file: 'static/build/ssr.js'
+      file: 'static/build/ssr.js',
     },
     plugins: [
       svelte({
@@ -131,6 +131,9 @@ export default [
       file: 'static/build/ssrEntry.js',
     },
     plugins: [
+      externalGlobals({
+        fetch: 'fetch',
+      }),
       resolve(),
       commonjs(),
       production && terser()
