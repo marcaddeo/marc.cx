@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { onMount } from "svelte";
   import { Router, Link, Route } from "svelte-routing";
   import Header from "./components/Header.svelte";
   import Footer from "./components/Footer.svelte";
@@ -8,24 +7,20 @@
   import Articles from "./pages/Articles.svelte";
   import Projects from "./pages/Projects.svelte";
 
-  export let url: string = "";
-
-  onMount(() => {
-    fetch('https://jsonplaceholder.typicode.com/todos/1')
-      .then(response => response.json())
-      .then(json => console.log(json));
-  });
-
+  export let url: string | null = null;
+  export let ssrContent: string | null = null;
 </script>
 
-<Header {url} />
+<Header url="{url}" />
 
-<Router {url}>
+<Router url="{url}">
   <main>
-    <Route path="/" component="{Home}" />
-    <Route path="article/:slug" component="{Article}" />
+    <Route path="article/:slug" let:params>
+      <Article slug="{params.slug}" content="{ssrContent}" />
+    </Route>
     <Route path="articles" component="{Articles}" />
     <Route path="projects" component="{Projects}" />
+    <Route path="/" component="{Home}" />
   </main>
 </Router>
 

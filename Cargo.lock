@@ -819,6 +819,7 @@ dependencies = [
  "grass",
  "lol_html",
  "rocket",
+ "serde_json",
  "ssr_rs",
 ]
 
