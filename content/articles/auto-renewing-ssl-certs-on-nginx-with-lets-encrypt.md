@@ -1,9 +1,13 @@
-__START_META__
+---
 title: Auto Renewing SSL Certs on NGINX with Let's Encrypt
+slug: auto-renewing-ssl-certs-on-nginx-with-lets-encrypt
 status: published
-published: 12/12/2015
+published: 2015-12-12 00:00
 excerpt: How I'm using Let's Encrypt for free auto renewing SSL certificates on NGINX
-__END_META__
+tags:
+  - linux
+  - devops
+---
 # Auto Renewing SSL Certs on NGINX with Let's Encrypt
 
 [Let's Encrypt][] has recently entered a public beta and I've been really excited
@@ -289,5 +293,5 @@ certificates and having a potential website outage!
 [Elixir Language]: http://elixir-lang.org/
 [Mozilla SSL Configuration Generator]: https://mozilla.github.io/server-side-tls/ssl-config-generator/
 [Qualys SSL Labs SSL Tester]: https://www.ssllabs.com/ssltest/
-[SSL Grade]: http://i.imgur.com/DpUQ3FD.png
+[SSL Grade]: https://i.imgur.com/DpUQ3FD.png
 [simp_le_renew]: https://github.com/marcaddeo/simp_le_renew

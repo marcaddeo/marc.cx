@@ -1,5 +1,7 @@
 <script lang="ts">
   import ArticleList from "../components/ArticleList.svelte";
+
+  export let articles;
 </script>
 
 <div class="container">
@@ -21,7 +23,7 @@
   <section class="article-list">
     <h2><span>Recent Articles</span></h2>
 
-    <ArticleList articleCount="3" />
+    <ArticleList {articles} articleCount="3" />
   </section>
 </div>
 

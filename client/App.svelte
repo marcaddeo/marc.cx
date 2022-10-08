@@ -1,14 +1,10 @@
 <script lang="ts">
   import { Router, Link, Route } from "svelte-routing";
-  import Header from "./components/Header.svelte";
-  import Footer from "./components/Footer.svelte";
-  import Home from "./pages/Home.svelte";
-  import Article from "./pages/Article.svelte";
-  import Articles from "./pages/Articles.svelte";
-  import Projects from "./pages/Projects.svelte";
+  import { Header, Footer } from "./components";
+  import { Home, Article, Articles, Projects } from "./pages";
 
   export let url: string | null = null;
-  export let ssrContent: string | null = null;
+  export let ssrContent = null;
 </script>
 
 <Header url="{url}" />
@@ -16,11 +12,15 @@
 <Router url="{url}">
   <main>
     <Route path="article/:slug" let:params>
-      <Article slug="{params.slug}" content="{ssrContent}" />
+      <Article slug="{params.slug}" article="{JSON.parse(ssrContent)}" />
     </Route>
-    <Route path="articles" component="{Articles}" />
+    <Route path="articles">
+      <Articles articles="{JSON.parse(ssrContent)}" />
+    </Route>
     <Route path="projects" component="{Projects}" />
-    <Route path="/" component="{Home}" />
+    <Route path="/">
+      <Home articles="{JSON.parse(ssrContent)}" />
+    </Route>
   </main>
 </Router>
 

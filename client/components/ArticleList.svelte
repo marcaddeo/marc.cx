@@ -1,9 +1,8 @@
 <script lang="ts">
+  import { onMount } from "svelte";
   import { Link } from "svelte-routing";
 
-  export let articleCount: number;
-
-  interface Article {
+  interface ArticleMetadata {
     title: string,
     excerpt: string,
     slug: string,
@@ -11,40 +10,38 @@
     tags: string[],
   }
 
-  const articles: Article[] = [
-    {
-      title: "Auto Renewing SSL Certs on NGINX with Let's Encrypt",
-      excerpt: "How I'm using Let's Encrypt for free auto renewing SSL certificates on NGINX",
-      slug: "auto-renewing-ssl-certs-on-nginx-with-lets-encrypt",
-      published: new Date("2015-12-12"),
-      tags: ["linux", "devops"],
-    },
-    {
-      title: "Hello World",
-      excerpt: "In which I make the first blog article on my new site. A short introduction to my blog, and the technologies behind it.",
-      slug: "hello-world",
-      published: new Date("2015-05-26"),
-      tags: ["elixir"],
-    },
-  ].slice(0, articleCount);
+  interface Article {
+    metadata: ArticleMetadata,
+    html: string,
+  }
+
+  export let articles: Articles[];
+  export let articleCount: number;
+
+  onMount(async () => {
+    const res = await fetch("/api/articles");
+    articles = await res.json();
+  });
 </script>
 
-{#each articles as article}
-  {@const date = article.published.toISOString().slice(0, 10)}
-  <article>
-    <h3><Link to="article/{article.slug}">{article.title}</Link></h3>
-    <div>
-      <time datetime="{date}">{date}</time>
-      :: 
-      <span>
-      {#each article.tags as tag, i}
-        <a href="/tag/{tag}">#{tag}</a>{#if i < (article.tags.length - 1)},&nbsp;{/if}
-      {/each}
-      </span>
-    </div>
-    <p>{article.excerpt}</p>
-  </article>
-{/each}
+{#if articles}
+  {#each articles as article}
+    {@const date = new Date(article.metadata.published).toISOString().slice(0, 10)}
+    <article>
+      <h3><Link to="article/{article.metadata.slug}">{article.metadata.title}</Link></h3>
+      <div>
+        <time datetime="{date}">{date}</time>
+        :: 
+        <span>
+        {#each article.metadata.tags as tag, i}
+          <a href="/tag/{tag}">#{tag}</a>{#if i < (article.metadata.tags.length - 1)},&nbsp;{/if}
+        {/each}
+        </span>
+      </div>
+      <p>{article.metadata.excerpt}</p>
+    </article>
+  {/each}
+{/if}
 
 <style lang="scss">
   article {

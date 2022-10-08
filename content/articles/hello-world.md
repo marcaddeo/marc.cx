@@ -1,9 +1,12 @@
-__START_META__
+---
 title: Hello World
+slug: hello-world
 status: published
-published: 05/26/2015
+published: 2015-05-26 00:00
 excerpt: In which I make the first blog article on my new site. A short introduction to my blog, and the technologies behind it.
-__END_META__
+tags:
+  - elixir
+---
 # Hello World!
 
 I've decided to start a blog. It's an idea that I play with every so often, and
