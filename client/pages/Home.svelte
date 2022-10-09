@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { ArticleList } from "../components";
+  import { ArticleList, SpecialHeading } from "../components";
 
   export let articles;
 </script>
@@ -25,7 +25,7 @@
   </section>
 
   <section class="article-list">
-    <h2><span>Recent Articles</span></h2>
+    <SpecialHeading>Recent Articles</SpecialHeading>
 
     <ArticleList {articles} articleCount="3" />
   </section>
@@ -81,33 +81,5 @@
 
   .article-list {
     grid-area: articles;
-
-    h2 {
-      display: grid;
-      grid-template-areas:
-        "text gradient";
-      grid-template-columns: .4fr .6fr;
-      padding: .3rem 0;
-      font-family: $font-fira-code;
-
-      span {
-        grid-area: text;
-        text-align: center;
-        background: $color-brand;
-        color: white;
-      }
-
-      &:after {
-        content: "";
-        grid-area: gradient;
-        background: repeating-linear-gradient(
-          90deg,
-          $color-brand,
-          $color-brand 2px,
-          transparent 0,
-          transparent 10px
-        );
-      }
-    }
   }
 </style>
