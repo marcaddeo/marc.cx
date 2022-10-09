@@ -15,6 +15,12 @@ use rocket::serde::json::Json;
 use chrono::{DateTime, Utc};
 
 #[derive(Serialize, Deserialize, Debug)]
+struct SsrOutput {
+    head: String,
+    html: String,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "lowercase")]
 enum ArticleStatus {
     Published,
@@ -137,14 +143,20 @@ fn ssr(path: PathBuf, ssr_content: Option<String>) -> String {
 
     let template = read_to_string(relative!("static/index.html")).unwrap();
     let ssr_entry = read_to_string(relative!("static/build/ssrEntry.js")).unwrap();
-    let inner_html = Ssr::render_to_string(&ssr_entry, "ssrEntry", Some(&params.to_string()));
+    let ssr_string = Ssr::render_to_string(&ssr_entry, "ssrEntry", Some(&params.to_string()));
+    let ssr_output: SsrOutput = serde_json::from_str(&ssr_string).unwrap();
 
     rewrite_str(
         &template,
         RewriteStrSettings {
             element_content_handlers: vec![
+                element!("head", |el: &mut Element| {
+                    el.append(&ssr_output.head, ContentType::Html);
+
+                    Ok(())
+                }),
                 element!("body", |el: &mut Element| {
-                    el.append(&inner_html, ContentType::Html);
+                    el.append(&ssr_output.html, ContentType::Html);
 
                     Ok(())
                 }),
