@@ -70,6 +70,7 @@ export default [
       }),
       commonjs(),
       typescript({
+        rootDir: './client',
         sourceMap: !production,
         inlineSources: !production
       }),
