@@ -12,7 +12,7 @@
       <Link to="articles">Articles</Link>
       <Link to="projects">Projects</Link>
       <a target="_blank" href="https://github.com/marcaddeo">GitHub</a>
-      <a target="_blank" href="https://www.linkedin.com/in/marc-addeo-6793159b/">LinkedIn</a>
+      <a target="_blank" href="https://www.linkedin.com/in/marc-addeo/">LinkedIn</a>
     </nav>
   </Router>
 </header>
