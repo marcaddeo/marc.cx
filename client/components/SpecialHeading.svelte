@@ -14,7 +14,11 @@
 </script>
 
 <div>
-  <svelte:element this={heading}><span><slot /></span></svelte:element>
+  <svelte:element this={heading}>
+    <span>
+      <slot />
+    </span>
+  </svelte:element>
 </div>
 
 <style lang="scss">
