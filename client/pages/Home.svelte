@@ -4,6 +4,10 @@
   export let articles;
 </script>
 
+<svelte:head>
+  <title>Home | marc.cx</title>
+</svelte:head>
+
 <div class="container">
   <section class="greeting-section">
     <div class="greeting-container">
