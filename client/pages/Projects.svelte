@@ -1,11 +1,12 @@
 <script lang="ts">
+  import { SpecialHeading } from "../components";
 </script>
 
 <svelte:head>
   <title>Projects | marc.cx</title>
 </svelte:head>
 
-<h1>Projects go here</h1>
+<SpecialHeading>Projects</SpecialHeading>
 
 <style lang="scss">
 </style>
