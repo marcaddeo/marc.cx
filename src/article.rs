@@ -44,6 +44,7 @@ pub fn get_articles() -> Vec<Article> {
         articles.push(parse_article(path));
     }
 
+    articles.sort_by(|a, b| b.metadata.published.cmp(&a.metadata.published));
     articles
 }
 
