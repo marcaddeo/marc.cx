@@ -1,12 +1,12 @@
 <script lang="ts">
-  import { Router, Link, link } from "svelte-routing";
+  import { Router, Link } from "svelte-routing";
 
   export let url: string = "";
 </script>
 
 <header>
   <Router url="{url}">
-    <span><a href="/" use:link>~/marc</a></span>
+    <span><Link to="/">~/marc</Link></span>
     <nav>
       <Link to="/">Home</Link>
       <Link to="articles">Articles</Link>
