@@ -201,6 +201,17 @@ fn articles() -> content::RawHtml<String> {
     content::RawHtml(template)
 }
 
+#[get("/")]
+fn home() -> content::RawHtml<String> {
+    let article_count = 2;
+
+    let articles = get_articles();
+    let articles = &articles[..article_count];
+    let template = ssr(PathBuf::from("/articles"), Some(serde_json::to_string(&articles).unwrap()));
+
+    content::RawHtml(template)
+}
+
 #[get("/<path..>")]
 fn index(path: PathBuf) -> content::RawHtml<String> {
     content::RawHtml(ssr(path, None))
@@ -209,7 +220,7 @@ fn index(path: PathBuf) -> content::RawHtml<String> {
 #[launch]
 fn rocket() -> _ {
     rocket::build()
-        .mount("/", routes![index, article, articles])
+        .mount("/", routes![index, home, article, articles])
         .mount("/api", routes![api_article, api_articles])
         .mount("/static", FileServer::from(relative!("static")).rank(-2))
 }
