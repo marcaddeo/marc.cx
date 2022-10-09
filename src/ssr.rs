@@ -1,11 +1,11 @@
-use std::path::PathBuf;
-use std::fs::read_to_string;
-use rocket::fs::relative;
-use ssr_rs::Ssr;
-use lol_html::{rewrite_str, element, RewriteStrSettings};
 use lol_html::html_content::{ContentType, Element};
+use lol_html::{element, rewrite_str, RewriteStrSettings};
+use rocket::fs::relative;
+use serde::{Deserialize, Serialize};
 use serde_json::json;
-use serde::{Serialize, Deserialize};
+use ssr_rs::Ssr;
+use std::fs::read_to_string;
+use std::path::PathBuf;
 
 #[derive(Serialize, Deserialize, Debug)]
 struct SsrOutput {
@@ -45,6 +45,7 @@ pub fn render(path: PathBuf, ssr_content: Option<String>) -> String {
                 }),
             ],
             ..RewriteStrSettings::default()
-        }
-    ).unwrap()
+        },
+    )
+    .unwrap()
 }

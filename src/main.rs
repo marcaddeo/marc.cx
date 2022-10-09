@@ -4,11 +4,11 @@ extern crate rocket;
 use rocket::fs::{relative, FileServer};
 use rocket::response::content;
 
-mod ymd_hm_format;
+mod api;
 mod article;
 mod page;
-mod api;
 mod ssr;
+mod ymd_hm_format;
 
 #[get("/<path..>")]
 fn index(path: PathBuf) -> content::RawHtml<String> {

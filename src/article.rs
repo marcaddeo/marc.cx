@@ -1,11 +1,11 @@
-use std::path::PathBuf;
-use std::fs::{read_dir, read_to_string};
-use serde::{Serialize, Deserialize};
-use rocket::fs::relative;
-use chrono::{DateTime, Utc};
-use yaml_front_matter::YamlFrontMatter;
-use pulldown_cmark::{Parser, Options, html};
 use super::ymd_hm_format;
+use chrono::{DateTime, Utc};
+use pulldown_cmark::{html, Options, Parser};
+use rocket::fs::relative;
+use serde::{Deserialize, Serialize};
+use std::fs::{read_dir, read_to_string};
+use std::path::PathBuf;
+use yaml_front_matter::YamlFrontMatter;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "lowercase")]
@@ -52,7 +52,7 @@ pub fn get_article_by_slug(slug: String) -> Option<Article> {
 
     for article in articles {
         if article.metadata.slug == slug {
-            return Some(article)
+            return Some(article);
         }
     }
 
@@ -72,4 +72,3 @@ fn parse_article(path: PathBuf) -> Article {
         html,
     }
 }
-

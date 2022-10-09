@@ -1,8 +1,7 @@
-use chrono::{DateTime, Utc, TimeZone};
-use serde::{self, Deserialize, Serializer, Deserializer};
+use chrono::{DateTime, TimeZone, Utc};
+use serde::{self, Deserialize, Deserializer, Serializer};
 
 const FORMAT: &'static str = "%Y-%m-%d %H:%M";
-
 
 // The signature of a serialize_with function must follow the pattern:
 //
@@ -11,10 +10,7 @@ const FORMAT: &'static str = "%Y-%m-%d %H:%M";
 //        S: Serializer
 //
 // although it may also be generic over the input types T.
-pub fn serialize<S>(
-    date: &DateTime<Utc>,
-    serializer: S,
-) -> Result<S::Ok, S::Error>
+pub fn serialize<S>(date: &DateTime<Utc>, serializer: S) -> Result<S::Ok, S::Error>
 where
     S: Serializer,
 {
@@ -29,12 +25,11 @@ where
 //        D: Deserializer<'de>
 //
 // although it may also be generic over the output types T.
-pub fn deserialize<'de, D>(
-    deserializer: D,
-) -> Result<DateTime<Utc>, D::Error>
+pub fn deserialize<'de, D>(deserializer: D) -> Result<DateTime<Utc>, D::Error>
 where
     D: Deserializer<'de>,
 {
     let s = String::deserialize(deserializer)?;
-    Utc.datetime_from_str(&s, FORMAT).map_err(serde::de::Error::custom)
+    Utc.datetime_from_str(&s, FORMAT)
+        .map_err(serde::de::Error::custom)
 }
