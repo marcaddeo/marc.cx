@@ -1,5 +1,5 @@
 <script lang="ts">
-  import ArticleList from "../components/ArticleList.svelte";
+  import { ArticleList, SpecialHeading } from "../components";
 
   export let articles: object | null = null;
 </script>
@@ -8,7 +8,10 @@
   <title>Articles | marc.cx</title>
 </svelte:head>
 
+<SpecialHeading>Articles</SpecialHeading>
+
 <ArticleList {articles} />
 
 <style lang="scss">
+  // @todo need a bunch of margin/padding up top.
 </style>
