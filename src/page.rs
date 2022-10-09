@@ -27,7 +27,7 @@ pub fn articles() -> content::RawHtml<String> {
 
 #[get("/")]
 pub fn home() -> content::RawHtml<String> {
-    let article_count = 2;
+    let article_count = 3;
 
     let articles = get_articles();
     let articles = &articles[..article_count];

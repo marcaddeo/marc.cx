@@ -19,7 +19,12 @@
   export let articleCount: number;
 
   onMount(async () => {
-    const res = await fetch("/api/articles");
+    let url = new URL("/api/articles", window.location.origin);
+    if (articleCount) {
+      url.search = new URLSearchParams({limit: articleCount});
+    }
+
+    const res = await fetch(url);
     articles = await res.json();
   });
 </script>
@@ -31,7 +36,7 @@
       <h3><Link to="article/{article.metadata.slug}">{article.metadata.title}</Link></h3>
       <div>
         <time datetime="{date}">{date}</time>
-        :: 
+        ::
         <span>
         {#each article.metadata.tags as tag, i}
           <a href="/tag/{tag}">#{tag}</a>{#if i < (article.metadata.tags.length - 1)},&nbsp;{/if}
