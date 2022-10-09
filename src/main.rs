@@ -20,14 +20,14 @@ struct SsrOutput {
     html: String,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "lowercase")]
 enum ArticleStatus {
     Published,
     Unpublished,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 struct ArticleMetadata {
     title: String,
     slug: String,
@@ -38,7 +38,7 @@ struct ArticleMetadata {
     tags: Vec<String>,
 }
 
-#[derive(Serialize, Debug)]
+#[derive(Serialize, Debug, Clone)]
 struct Article {
     metadata: ArticleMetadata,
     html: String,
@@ -174,12 +174,15 @@ fn api_article(slug: String) -> Option<Json<Article>> {
     }
 }
 
-#[get("/articles", format = "json")]
-fn api_articles() -> Json<Vec<Article>> {
+#[get("/articles?<limit>", format = "json")]
+fn api_articles(limit: Option<usize>) -> Json<Vec<Article>> {
     let mut articles = get_articles();
     articles.sort_by(|a, b| b.metadata.published.cmp(&a.metadata.published));
 
-    Json(articles)
+    match limit {
+        Some(limit) => Json(articles[..limit].to_vec()),
+        None => Json(articles)
+    }
 }
 
 #[get("/article/<slug>")]
