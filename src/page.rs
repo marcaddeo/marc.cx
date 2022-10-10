@@ -22,12 +22,12 @@ pub fn article(slug: String) -> (Status, content::RawHtml<String>) {
 #[get("/articles")]
 pub fn articles() -> content::RawHtml<String> {
     let articles = get_articles();
-    let template = ssr::render(
+    let html = ssr::render(
         PathBuf::from("/articles"),
         Some(serde_json::to_string(&articles).unwrap()),
     );
 
-    content::RawHtml(template)
+    content::RawHtml(html)
 }
 
 #[get("/")]
@@ -36,10 +36,10 @@ pub fn home() -> content::RawHtml<String> {
 
     let articles = get_articles();
     let articles = &articles[..article_count];
-    let template = ssr::render(
+    let html = ssr::render(
         PathBuf::from("/articles"),
         Some(serde_json::to_string(&articles).unwrap()),
     );
 
-    content::RawHtml(template)
+    content::RawHtml(html)
 }
