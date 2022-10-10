@@ -37,7 +37,7 @@ pub fn home() -> content::RawHtml<String> {
     let articles = get_articles();
     let articles = &articles[..article_count];
     let html = ssr::render(
-        PathBuf::from("/articles"),
+        PathBuf::from("/"),
         Some(serde_json::to_string(&articles).unwrap()),
     );
 
