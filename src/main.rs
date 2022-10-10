@@ -3,6 +3,7 @@ use std::path::PathBuf;
 extern crate rocket;
 use rocket::fs::{relative, FileServer};
 use rocket::response::content;
+use rocket::http::Status;
 
 mod api;
 mod article;
@@ -11,8 +12,15 @@ mod ssr;
 mod ymd_hm_format;
 
 #[get("/<path..>")]
-fn index(path: PathBuf) -> content::RawHtml<String> {
-    content::RawHtml(ssr::render(path, None))
+fn index(path: PathBuf) -> (Status, content::RawHtml<String>) {
+    let html = ssr::render(path, None);
+    let status = if html.contains("window.not_found = true;") {
+        Status::NotFound
+    } else {
+        Status::Ok
+    };
+
+    (status, content::RawHtml(html))
 }
 
 #[launch]

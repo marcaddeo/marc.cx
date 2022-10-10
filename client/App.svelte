@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Router, Link, Route } from "svelte-routing";
   import { Header, Footer } from "./components";
-  import { Home, Article, Articles, Projects } from "./pages";
+  import { Home, Article, Articles, Projects, NotFound } from "./pages";
 
   export let url: string | null = null;
   export let ssrContent = null;
@@ -21,6 +21,7 @@
     <Route path="/">
       <Home articles="{JSON.parse(ssrContent)}" />
     </Route>
+    <Route component="{NotFound}" />
   </main>
 </Router>
 
