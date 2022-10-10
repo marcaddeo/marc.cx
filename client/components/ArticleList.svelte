@@ -19,7 +19,7 @@
   export let articleCount: number | null = null;
 
   onMount(async () => {
-    let url = new URL("/api/articles", window.location.origin);
+    const url = new URL("/api/articles", window.location.origin);
     if (articleCount) {
       url.search = new URLSearchParams({limit: articleCount});
     }
