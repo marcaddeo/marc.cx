@@ -5,6 +5,9 @@
 
   export let url: string | null = null;
   export let ssrContent = null;
+  if (ssrContent) {
+    ssrContent = JSON.parse(ssrContent);
+  }
 </script>
 
 <Header url="{url}" />
@@ -12,14 +15,14 @@
 <Router url="{url}">
   <main>
     <Route path="article/:slug" let:params>
-      <Article slug="{params.slug}" article="{JSON.parse(ssrContent)}" />
+      <Article slug="{params.slug}" article="{ssrContent}" />
     </Route>
     <Route path="articles">
-      <Articles articles="{JSON.parse(ssrContent)}" />
+      <Articles articles="{ssrContent}" />
     </Route>
     <Route path="projects" component="{Projects}" />
     <Route path="/">
-      <Home articles="{JSON.parse(ssrContent)}" />
+      <Home articles="{ssrContent}" />
     </Route>
     <Route component="{NotFound}" />
   </main>
