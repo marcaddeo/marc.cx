@@ -2,16 +2,21 @@ use super::article::{get_article_by_slug, get_articles};
 use super::ssr;
 use rocket::response::content;
 use std::path::PathBuf;
+use rocket::http::Status;
 
 #[get("/article/<slug>")]
-pub fn article(slug: String) -> content::RawHtml<String> {
-    let article = get_article_by_slug(slug.clone()).unwrap();
-    let template = ssr::render(
+pub fn article(slug: String) -> (Status, content::RawHtml<String>) {
+    let article = get_article_by_slug(slug.clone());
+    let (status, content) = match article {
+        Some(article) => (Status::Ok, serde_json::to_string(&article).unwrap()),
+        None => (Status::NotFound, String::from("{\"not_found\": true}")),
+    };
+    let html = ssr::render(
         PathBuf::from(format!("/article/{}", slug)),
-        Some(serde_json::to_string(&article).unwrap()),
+        Some(content),
     );
 
-    content::RawHtml(template)
+    (status, content::RawHtml(html))
 }
 
 #[get("/articles")]
