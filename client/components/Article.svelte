@@ -5,8 +5,16 @@
   export let article: object | null = null;
 
   onMount(async () => {
-    const res = await fetch(`/api/article/${slug}`);
-    article = await res.json();
+    const res = await fetch(`/api/article/${slug}`, {
+      headers: {
+        "Accept": "application/json",
+      },
+    });
+    if (res.ok) {
+      article = await res.json();
+    } else {
+      article = {"not_found": true};
+    }
   });
 </script>
 

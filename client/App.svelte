@@ -8,16 +8,6 @@
   if (ssrContent) {
     ssrContent = JSON.parse(ssrContent);
   }
-
-  let articleComponent = Article;
-  let articleComponentProps = {};
-  if (ssrContent && ssrContent?.not_found) {
-    articleComponent = NotFound;
-  } else {
-    articleComponentProps = {
-      article: ssrContent,
-    };
-  }
 </script>
 
 <Header url="{url}" />
@@ -25,7 +15,7 @@
 <Router url="{url}">
   <main>
     <Route path="article/:slug" let:params>
-      <svelte:component this={articleComponent} slug="{params.slug}" {...articleComponentProps} />
+      <Article slug="{params.slug}" article="{ssrContent}" />
     </Route>
     <Route path="articles">
       <Articles articles="{ssrContent}" />
