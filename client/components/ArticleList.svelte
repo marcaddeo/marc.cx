@@ -16,7 +16,7 @@
   }
 
   export let articles: Articles[];
-  export let articleCount: number;
+  export let articleCount: number | null = null;
 
   onMount(async () => {
     let url = new URL("/api/articles", window.location.origin);
