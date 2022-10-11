@@ -2,8 +2,8 @@ use std::path::PathBuf;
 #[macro_use]
 extern crate rocket;
 use rocket::fs::{relative, FileServer};
-use rocket::response::content;
 use rocket::http::Status;
+use rocket::response::content;
 
 mod api;
 mod article;

@@ -2,8 +2,8 @@ use super::ymd_hm_format;
 use chrono::{DateTime, Utc};
 use pulldown_cmark::{html, Options, Parser};
 use rocket::fs::relative;
-use serde::{Deserialize, Serialize};
 use serde::ser::{SerializeStruct, SerializeStructVariant};
+use serde::{Deserialize, Serialize};
 use std::fs::{read_dir, read_to_string};
 use std::path::PathBuf;
 use yaml_front_matter::YamlFrontMatter;
@@ -39,11 +39,15 @@ pub struct ArticleCollection {
 
 impl ArticleCollection {
     pub fn new() -> Self {
-        ArticleCollection { articles: get_articles() }
+        ArticleCollection {
+            articles: get_articles(),
+        }
     }
 
     pub fn new_ext(limit: usize) -> Self {
-        ArticleCollection { articles: get_articles()[..limit].to_vec() }
+        ArticleCollection {
+            articles: get_articles()[..limit].to_vec(),
+        }
     }
 }
 
@@ -61,7 +65,7 @@ pub enum ArticleEntry {
         code: u16,
         description: String,
         reason: String,
-    }
+    },
 }
 
 impl serde::ser::Serialize for ArticleEntry {
@@ -75,8 +79,12 @@ impl serde::ser::Serialize for ArticleEntry {
                 ss.serialize_field("metadata", &article.metadata)?;
                 ss.serialize_field("html", &article.html)?;
                 ss.end()
-            },
-            ArticleEntry::NotFound { code, description, reason } => {
+            }
+            ArticleEntry::NotFound {
+                code,
+                description,
+                reason,
+            } => {
                 let mut sv = serializer.serialize_struct_variant("ArticleEntry", 0, "error", 3)?;
                 sv.serialize_field("code", code)?;
                 sv.serialize_field("description", description)?;
@@ -97,14 +105,16 @@ impl SpecificArticle {
         let article = get_article_by_slug(slug);
 
         match article {
-            Some(article) => Self { article: ArticleEntry::Article(article) },
+            Some(article) => Self {
+                article: ArticleEntry::Article(article),
+            },
             None => Self {
                 article: ArticleEntry::NotFound {
                     code: 404,
                     description: String::from("The requested resource could not be found."),
                     reason: String::from("Not Found"),
-                }
-            }
+                },
+            },
         }
     }
 }

@@ -1,7 +1,7 @@
-use super::article::{SpecificArticle, ArticleEntry, ArticleCollection};
+use super::article::{ArticleCollection, ArticleEntry, SpecificArticle};
 use super::ssr;
-use rocket::response::content;
 use rocket::http::Status;
+use rocket::response::content;
 
 #[get("/article/<slug>")]
 pub fn article(slug: String) -> (Status, content::RawHtml<String>) {
@@ -11,10 +11,7 @@ pub fn article(slug: String) -> (Status, content::RawHtml<String>) {
         ArticleEntry::NotFound { .. } => Status::NotFound,
     };
 
-    let html = ssr::render(
-        format!("/article/{}", slug),
-        Some(article)
-    );
+    let html = ssr::render(format!("/article/{}", slug), Some(article));
 
     (status, content::RawHtml(html))
 }
@@ -22,10 +19,7 @@ pub fn article(slug: String) -> (Status, content::RawHtml<String>) {
 #[get("/articles")]
 pub fn articles() -> content::RawHtml<String> {
     let articles = ArticleCollection::new();
-    let html = ssr::render(
-        "/articles",
-        Some(articles),
-    );
+    let html = ssr::render("/articles", Some(articles));
 
     content::RawHtml(html)
 }
@@ -33,10 +27,7 @@ pub fn articles() -> content::RawHtml<String> {
 #[get("/")]
 pub fn home() -> content::RawHtml<String> {
     let articles = ArticleCollection::new_ext(3);
-    let html = ssr::render(
-        "/",
-        Some(serde_json::to_value(articles).unwrap()),
-    );
+    let html = ssr::render("/", Some(serde_json::to_value(articles).unwrap()));
 
     content::RawHtml(html)
 }
