@@ -10,16 +10,13 @@
         "Accept": "application/json",
       },
     });
-    if (res.ok) {
-      article = await res.json();
-    } else {
-      article = {"not_found": true};
-    }
+
+    article = await res.json();
   });
 </script>
 
 <article>
-{#if article}
+{#if article?.html}
   {@html article.html}
 {/if}
 </article>
