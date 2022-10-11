@@ -5,7 +5,7 @@
   export let slug: string;
   export let article: object | null = null;
 
-  $: component = (article && article?.not_found) ? NotFound : Article;
+  $: component = (article && article?.error) ? NotFound : Article;
 </script>
 
 <svelte:head>

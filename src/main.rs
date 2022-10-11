@@ -13,7 +13,7 @@ mod ymd_hm_format;
 
 #[get("/<path..>")]
 fn index(path: PathBuf) -> (Status, content::RawHtml<String>) {
-    let html = ssr::render(path, None);
+    let html = ssr::render(path, None::<serde_json::Value>);
     let status = if html.contains("window.not_found = true;") {
         Status::NotFound
     } else {

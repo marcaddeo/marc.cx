@@ -13,15 +13,14 @@ struct SsrOutput {
     html: String,
 }
 
-pub fn render(path: PathBuf, ssr_content: Option<String>) -> String {
-    let ssr_content_string = match ssr_content {
-        Some(content) => content,
-        None => String::from("null"),
-    };
-
+pub fn render<P, J>(path: P, props: Option<J>) -> String
+where
+    P: Into<PathBuf> + Serialize,
+    J: Into<serde_json::Value> + Serialize,
+{
     let params = json!({
-        "url": &path,
-        "ssrContent": ssr_content_string,
+        "url": path,
+        "props": props,
     });
 
     let template = read_to_string(relative!("static/index.html")).unwrap();

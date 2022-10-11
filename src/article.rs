@@ -3,6 +3,7 @@ use chrono::{DateTime, Utc};
 use pulldown_cmark::{html, Options, Parser};
 use rocket::fs::relative;
 use serde::{Deserialize, Serialize};
+use serde::ser::{SerializeStruct, SerializeStructVariant};
 use std::fs::{read_dir, read_to_string};
 use std::path::PathBuf;
 use yaml_front_matter::YamlFrontMatter;
@@ -25,10 +26,93 @@ pub struct ArticleMetadata {
     pub tags: Vec<String>,
 }
 
-#[derive(Serialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Article {
     pub metadata: ArticleMetadata,
     pub html: String,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct ArticleCollection {
+    articles: Vec<Article>,
+}
+
+impl ArticleCollection {
+    pub fn new() -> Self {
+        ArticleCollection { articles: get_articles() }
+    }
+
+    pub fn new_ext(limit: usize) -> Self {
+        ArticleCollection { articles: get_articles()[..limit].to_vec() }
+    }
+}
+
+impl From<ArticleCollection> for serde_json::Value {
+    fn from(value: ArticleCollection) -> Self {
+        serde_json::to_value(value).unwrap()
+    }
+}
+
+#[derive(Deserialize, Debug)]
+#[serde(untagged)]
+pub enum ArticleEntry {
+    Article(Article),
+    NotFound {
+        code: u16,
+        description: String,
+        reason: String,
+    }
+}
+
+impl serde::ser::Serialize for ArticleEntry {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        match self {
+            ArticleEntry::Article(article) => {
+                let mut ss = serializer.serialize_struct("Article", 2)?;
+                ss.serialize_field("metadata", &article.metadata)?;
+                ss.serialize_field("html", &article.html)?;
+                ss.end()
+            },
+            ArticleEntry::NotFound { code, description, reason } => {
+                let mut sv = serializer.serialize_struct_variant("ArticleEntry", 0, "error", 3)?;
+                sv.serialize_field("code", code)?;
+                sv.serialize_field("description", description)?;
+                sv.serialize_field("reason", reason)?;
+                sv.end()
+            }
+        }
+    }
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct SpecificArticle {
+    pub article: ArticleEntry,
+}
+
+impl SpecificArticle {
+    pub fn new(slug: String) -> Self {
+        let article = get_article_by_slug(slug);
+
+        match article {
+            Some(article) => Self { article: ArticleEntry::Article(article) },
+            None => Self {
+                article: ArticleEntry::NotFound {
+                    code: 404,
+                    description: String::from("The requested resource could not be found."),
+                    reason: String::from("Not Found"),
+                }
+            }
+        }
+    }
+}
+
+impl From<SpecificArticle> for serde_json::Value {
+    fn from(value: SpecificArticle) -> Self {
+        serde_json::to_value(value).unwrap()
+    }
 }
 
 pub fn get_articles() -> Vec<Article> {

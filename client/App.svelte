@@ -4,10 +4,7 @@
   import { Home, Article, Articles, Projects, NotFound } from "./pages";
 
   export let url: string | null = null;
-  export let ssrContent = null;
-  if (ssrContent) {
-    ssrContent = JSON.parse(ssrContent);
-  }
+  export let props: object = {};
 </script>
 
 <Header url="{url}" />
@@ -15,14 +12,14 @@
 <Router url="{url}">
   <main>
     <Route path="article/:slug" let:params>
-      <Article slug="{params.slug}" article="{ssrContent}" />
+      <Article slug="{params.slug}" {...props} />
     </Route>
     <Route path="articles">
-      <Articles articles="{ssrContent}" />
+      <Articles {...props} />
     </Route>
     <Route path="projects" component="{Projects}" />
     <Route path="/">
-      <Home articles="{ssrContent}" />
+      <Home  {...props} />
     </Route>
     <Route component="{NotFound}" />
   </main>

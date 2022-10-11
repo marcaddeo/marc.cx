@@ -1,19 +1,19 @@
-use super::article::{get_article_by_slug, get_articles};
+use super::article::{SpecificArticle, ArticleEntry, ArticleCollection};
 use super::ssr;
 use rocket::response::content;
-use std::path::PathBuf;
 use rocket::http::Status;
 
 #[get("/article/<slug>")]
 pub fn article(slug: String) -> (Status, content::RawHtml<String>) {
-    let article = get_article_by_slug(slug.clone());
-    let (status, content) = match article {
-        Some(article) => (Status::Ok, serde_json::to_string(&article).unwrap()),
-        None => (Status::NotFound, String::from("{\"not_found\": true}")),
+    let article = SpecificArticle::new(slug.clone());
+    let status = match article.article {
+        ArticleEntry::Article(_) => Status::Ok,
+        ArticleEntry::NotFound { .. } => Status::NotFound,
     };
+
     let html = ssr::render(
-        PathBuf::from(format!("/article/{}", slug)),
-        Some(content),
+        format!("/article/{}", slug),
+        Some(article)
     );
 
     (status, content::RawHtml(html))
@@ -21,10 +21,10 @@ pub fn article(slug: String) -> (Status, content::RawHtml<String>) {
 
 #[get("/articles")]
 pub fn articles() -> content::RawHtml<String> {
-    let articles = get_articles();
+    let articles = ArticleCollection::new();
     let html = ssr::render(
-        PathBuf::from("/articles"),
-        Some(serde_json::to_string(&articles).unwrap()),
+        "/articles",
+        Some(articles),
     );
 
     content::RawHtml(html)
@@ -32,13 +32,10 @@ pub fn articles() -> content::RawHtml<String> {
 
 #[get("/")]
 pub fn home() -> content::RawHtml<String> {
-    let article_count = 3;
-
-    let articles = get_articles();
-    let articles = &articles[..article_count];
+    let articles = ArticleCollection::new_ext(3);
     let html = ssr::render(
-        PathBuf::from("/"),
-        Some(serde_json::to_string(&articles).unwrap()),
+        "/",
+        Some(serde_json::to_value(articles).unwrap()),
     );
 
     content::RawHtml(html)
