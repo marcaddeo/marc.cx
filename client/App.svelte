@@ -7,9 +7,9 @@
   export let props: object = {};
 </script>
 
-<Header url="{url}" />
+<Header {url} />
 
-<Router url="{url}">
+<Router {url}>
   <main>
     <Route path="article/:slug" let:params>
       <Article slug="{params.slug}" {...props} />
