@@ -28,7 +28,6 @@ where
     P: Into<PathBuf> + Serialize,
     J: Into<serde_json::Value> + Serialize,
 {
-
     let params = SsrInput {
         url: path,
         props,
