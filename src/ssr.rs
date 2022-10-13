@@ -28,10 +28,7 @@ where
     P: Into<PathBuf> + Serialize,
     J: Into<serde_json::Value> + Serialize,
 {
-    let params = SsrInput {
-        url: path,
-        props,
-    };
+    let params = SsrInput { url: path, props };
 
     let template = read_to_string(relative!("static/index.html")).unwrap();
     let ssr_entry = read_to_string(relative!("static/build/ssrEntry.js")).unwrap();

@@ -7,8 +7,8 @@ use rocket::response::content;
 
 mod api;
 mod article;
-mod project;
 mod page;
+mod project;
 mod ssr;
 mod ymd_hm_format;
 
@@ -30,7 +30,10 @@ fn rocket() -> _ {
         // SSR catch-all.
         .mount("/", routes![index])
         // SSR pages.
-        .mount("/", routes![page::home, page::article, page::articles, page::projects])
+        .mount(
+            "/",
+            routes![page::home, page::article, page::articles, page::projects],
+        )
         // API endpoints.
         .mount("/api", routes![api::article, api::articles, api::projects])
         // Static files.
