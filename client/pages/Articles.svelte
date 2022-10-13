@@ -1,7 +1,8 @@
 <script lang="ts">
   import { ArticleList, SpecialHeading } from "../components";
+  import type { ArticleInterface } from "../components"
 
-  export let articles: object | null = null;
+  export let articles: ArticleInterface[] | null = null;
 </script>
 
 <svelte:head>

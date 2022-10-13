@@ -1,7 +1,8 @@
 <script lang="ts">
   import { ArticleList, SpecialHeading } from "../components";
+  import type { ArticleInterface } from "../components";
 
-  export let articles;
+  export let articles: ArticleInterface[] | null = null;
 </script>
 
 <svelte:head>
@@ -27,7 +28,7 @@
   <section class="article-list">
     <SpecialHeading>Recent Articles</SpecialHeading>
 
-    <ArticleList {articles} articleCount="3" />
+    <ArticleList {articles} articleCount={3} />
   </section>
 </div>
 

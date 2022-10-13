@@ -3,3 +3,10 @@ export { default as Footer } from "./Footer.svelte";
 export { default as Article } from "./Article.svelte";
 export { default as ArticleList } from "./ArticleList.svelte";
 export { default as SpecialHeading } from "./SpecialHeading.svelte";
+
+export { HeadingType } from "./types";
+export type {
+  ArticleInterface,
+  ArticleMetadataInterface,
+  NotFoundErrorInterface,
+} from "./types";

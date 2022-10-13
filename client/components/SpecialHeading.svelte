@@ -1,15 +1,6 @@
-<script context="module" lang="ts">
-  export const enum HeadingType {
-    H1 = "h1",
-    H2 = "h2",
-    H3 = "h3",
-    H4 = "h4",
-    H5 = "h5",
-    H6 = "h6",
-  };
-</script>
-
 <script lang="ts">
+  import { HeadingType } from "./types";
+
   export let heading: HeadingType = HeadingType.H1;
 </script>
 

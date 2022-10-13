@@ -1,9 +1,10 @@
 <script lang="ts">
   import { Article } from "../components";
+  import type { ArticleInterface } from "../components";
   import NotFound from "./NotFound.svelte";
 
   export let slug: string;
-  export let article: object | null = null;
+  export let article: ArticleInterface | null = null;
 
   $: component = (article && article?.error) ? NotFound : Article;
 </script>

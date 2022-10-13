@@ -1,27 +1,15 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { Link } from "svelte-routing";
+  import type { ArticleInterface } from "./types";
 
-  interface ArticleMetadata {
-    title: string,
-    excerpt: string,
-    slug: string,
-    published: Date,
-    tags: string[],
-  }
-
-  interface Article {
-    metadata: ArticleMetadata,
-    html: string,
-  }
-
-  export let articles: Articles[];
+  export let articles: ArticleInterface[];
   export let articleCount: number | null = null;
 
   onMount(async () => {
     const url = new URL("/api/articles", window.location.origin);
     if (articleCount) {
-      url.search = new URLSearchParams({limit: articleCount});
+      url.search = (new URLSearchParams({limit: String(articleCount)})).toString();
     }
 
     const res = await fetch(url);
