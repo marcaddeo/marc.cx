@@ -1,7 +1,8 @@
-export interface ArticleMetadataInterface {
+export interface MetadataInterface {
   title: string,
-  excerpt: string,
-  slug: string,
+  excerpt?: string,
+  slug?: string,
+  link?: string,
   published: Date,
   tags: string[],
 }
@@ -13,7 +14,13 @@ export interface NotFoundErrorInterface {
 }
 
 export interface ArticleInterface {
-  metadata?: ArticleMetadataInterface,
+  metadata?: MetadataInterface,
+  html?: string,
+  error?: NotFoundErrorInterface,
+}
+
+export interface ProjectInterface {
+  metadata?: MetadataInterface,
   html?: string,
   error?: NotFoundErrorInterface,
 }

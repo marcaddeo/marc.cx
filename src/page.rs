@@ -1,4 +1,5 @@
 use super::article::{ArticleCollection, ArticleEntry, SpecificArticle};
+use super::project::ProjectCollection;
 use super::ssr;
 use rocket::http::Status;
 use rocket::response::content;
@@ -18,16 +19,21 @@ pub fn article(slug: String) -> (Status, content::RawHtml<String>) {
 
 #[get("/articles")]
 pub fn articles() -> content::RawHtml<String> {
-    let articles = ArticleCollection::new();
-    let html = ssr::render("/articles", Some(articles));
+    let html = ssr::render("/articles", Some(ArticleCollection::new()));
+
+    content::RawHtml(html)
+}
+
+#[get("/projects")]
+pub fn projects() -> content::RawHtml<String> {
+    let html = ssr::render("/projects", Some(ProjectCollection::new()));
 
     content::RawHtml(html)
 }
 
 #[get("/")]
 pub fn home() -> content::RawHtml<String> {
-    let articles = ArticleCollection::new_ext(3);
-    let html = ssr::render("/", Some(serde_json::to_value(articles).unwrap()));
+    let html = ssr::render("/", Some(ArticleCollection::new_ext(3)));
 
     content::RawHtml(html)
 }

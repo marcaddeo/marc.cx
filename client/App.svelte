@@ -17,7 +17,9 @@
     <Route path="articles">
       <Articles {...props} />
     </Route>
-    <Route path="projects" component="{Projects}" />
+    <Route path="projects">
+      <Projects {...props} />
+    </Route>
     <Route path="/">
       <Home  {...props} />
     </Route>
