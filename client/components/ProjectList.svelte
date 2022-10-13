@@ -13,7 +13,7 @@
 {#if projects}
   {#each projects as project}
     <article>
-      <h3>{project.metadata.title}</h3>
+      <h3><a href="{project.metadata.link}" target="_blank">{project.metadata.title}</a></h3>
       <div>
         <span>
         {#each project.metadata.tags as tag, i}
