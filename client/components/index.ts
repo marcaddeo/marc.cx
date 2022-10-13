@@ -6,7 +6,7 @@ export { default as SpecialHeading } from "./SpecialHeading.svelte";
 
 export { HeadingType } from "./types";
 export type {
-  ArticleInterface,
-  ArticleMetadataInterface,
-  NotFoundErrorInterface,
+  IArticle,
+  IArticleMetadata,
+  INotFoundError,
 } from "./types";

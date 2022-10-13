@@ -1,4 +1,4 @@
-export interface ArticleMetadataInterface {
+export interface IArticleMetadata {
   title: string,
   excerpt: string,
   slug: string,
@@ -6,16 +6,16 @@ export interface ArticleMetadataInterface {
   tags: string[],
 }
 
-export interface NotFoundErrorInterface {
+export interface INotFoundError {
   code: number,
   description: string,
   reason: string,
 }
 
-export interface ArticleInterface {
-  metadata?: ArticleMetadataInterface,
+export interface IArticle {
+  metadata?: IArticleMetadata,
   html?: string,
-  error?: NotFoundErrorInterface,
+  error?: INotFoundError,
 }
 
 export const enum HeadingType {

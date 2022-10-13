@@ -1,9 +1,9 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import type { ArticleInterface } from "./types";
+  import type { IArticle } from "./types";
 
   export let slug: string;
-  export let article: ArticleInterface | null = null;
+  export let article: IArticle | null = null;
 
   onMount(async () => {
     const res = await fetch(`/api/article/${slug}`, {
