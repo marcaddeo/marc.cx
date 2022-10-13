@@ -1,9 +1,9 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { Link } from "svelte-routing";
-  import type { ArticleInterface } from "./types";
+  import type { IArticle } from "./types";
 
-  export let articles: ArticleInterface[];
+  export let articles: IArticle[];
   export let articleCount: number | null = null;
 
   onMount(async () => {
