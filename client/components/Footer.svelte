@@ -1,9 +1,10 @@
 <script lang="ts">
+  const currentYear = new Date().getFullYear();
 </script>
 
 <footer>
   <div>
-    &copy; 2015-2022 Marc Addeo
+    &copy; 2015-{currentYear} Marc Addeo
   </div>
   <div>
     <a href="mailto:hi@marc.cx">hi@marc.cx</a>
