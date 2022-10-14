@@ -12,8 +12,10 @@
 <div class="container">
   <section class="greeting-section">
     <div class="greeting-container">
-      <div class="greeting">Nice to meet you; I'm</div>
-      <div class="name"><span>👨🏻‍💻</span>Marc</div>
+      <h1>
+        <span class="greeting">Nice to meet you; I'm</span>
+        <span class="name"><span>👨🏻‍💻</span>Marc</span>
+      </h1>
     </div>
     <div class="intro">
       <p>
@@ -60,6 +62,7 @@
       color: $color-heading-dark;
 
       .greeting {
+        display: block;
         font-family: $font-fira-code;
         letter-spacing: -2px;
         font-size: 2rem;
