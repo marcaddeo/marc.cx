@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { ArticleList, SpecialHeading } from "../components";
+  import { ArticleList, VerticalLineHeading } from "../components";
   import type { ArticleInterface } from "../components"
 
   export let articles: ArticleInterface[] | null = null;
@@ -9,7 +9,7 @@
   <title>Articles | marc.cx</title>
 </svelte:head>
 
-<SpecialHeading>Articles</SpecialHeading>
+<VerticalLineHeading>Articles</VerticalLineHeading>
 
 <ArticleList {articles} />
 

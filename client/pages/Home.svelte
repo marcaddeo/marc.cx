@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { ArticleList, SpecialHeading } from "../components";
+  import { ArticleList, VerticalLineHeading, HeadingType } from "../components";
   import type { ArticleInterface } from "../components";
 
   export let articles: ArticleInterface[] | null = null;
@@ -26,7 +26,7 @@
   </section>
 
   <section class="article-list">
-    <SpecialHeading>Recent Articles</SpecialHeading>
+    <VerticalLineHeading heading={HeadingType.H2}>Recent Articles</VerticalLineHeading>
 
     <ArticleList {articles} articleCount={3} />
   </section>

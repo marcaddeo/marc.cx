@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte";
+  import { HorizontalDashHeading, HeadingType } from "./index";
   import type { ProjectInterface } from "./types";
 
   export let projects: ProjectInterface[] | null = null;
@@ -13,7 +14,9 @@
 {#if projects}
   {#each projects as project}
     <article>
-      <h3><a href="{project.metadata.link}" target="_blank">{project.metadata.title}</a></h3>
+      <HorizontalDashHeading heading={HeadingType.H3}>
+        <a href="{project.metadata.link}" target="_blank">{project.metadata.title}</a>
+      </HorizontalDashHeading>
       <div>
         <span>
         {#each project.metadata.tags as tag, i}
@@ -30,22 +33,6 @@
   article {
     margin: 3rem 0;
     font-family: $font-fira-code;
-
-    & h3 {
-      border-bottom: 3px dotted $color-brand;
-      position: relative;
-      padding: 1rem 0;
-      margin: .8rem 0;
-
-      &:after {
-        content: "";
-        display: block;
-        position: absolute;
-        bottom: 2px;
-        width: 100%;
-        border-bottom: 3px dotted $color-brand;
-      }
-    }
 
     div span  {
       display: block;

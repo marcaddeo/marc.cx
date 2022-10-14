@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { SpecialHeading, ProjectList } from "../components";
+  import { VerticalLineHeading, ProjectList } from "../components";
   import type { ProjectInterface } from "../components";
 
   export let projects: ProjectInterface[] | null = null;
@@ -9,7 +9,7 @@
   <title>Projects | marc.cx</title>
 </svelte:head>
 
-<SpecialHeading>Projects</SpecialHeading>
+<VerticalLineHeading>Projects</VerticalLineHeading>
 
 <ProjectList {projects} />
 
