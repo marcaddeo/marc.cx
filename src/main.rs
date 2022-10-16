@@ -34,7 +34,13 @@ fn rocket() -> _ {
         // SSR pages.
         .mount(
             "/",
-            routes![page::home, page::article, page::articles, page::tag, page::projects],
+            routes![
+                page::home,
+                page::article,
+                page::articles,
+                page::tag,
+                page::projects
+            ],
         )
         // API endpoints.
         .mount("/api", routes![api::article, api::articles, api::projects])

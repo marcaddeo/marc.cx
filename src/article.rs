@@ -57,7 +57,8 @@ impl ArticleCollectionBuilder {
         let mut collection = self.internal_build()?;
 
         if let Some(Some(tag)) = &self.tag {
-            collection.articles = collection.articles
+            collection.articles = collection
+                .articles
                 .into_iter()
                 .filter(|article| article.metadata.tags.contains(tag))
                 .collect();
