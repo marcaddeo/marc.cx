@@ -6,16 +6,16 @@
   export let slug: string;
   export let article: ArticleInterface | null = null;
 
-  $: component = (article && article?.error) ? NotFound : Article;
+  $: component = article && article?.error ? NotFound : Article;
 </script>
 
 <svelte:head>
-{#if article?.metadata}
-  <title>{article.metadata.title} | marc.cx</title>
-{/if}
+  {#if article?.metadata}
+    <title>{article.metadata.title} | marc.cx</title>
+  {/if}
 </svelte:head>
 
-<svelte:component this={component} {slug} bind:article={article} />
+<svelte:component this={component} {slug} bind:article />
 
 <style lang="scss">
 </style>

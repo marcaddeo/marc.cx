@@ -5,14 +5,16 @@
 </script>
 
 <header>
-  <Router url="{url}">
+  <Router {url}>
     <span><Link to="/">~/marc</Link></span>
     <nav>
       <Link to="/">Home</Link>
       <Link to="articles">Articles</Link>
       <Link to="projects">Projects</Link>
       <a target="_blank" href="https://github.com/marcaddeo">GitHub</a>
-      <a target="_blank" href="https://www.linkedin.com/in/marc-addeo/">LinkedIn</a>
+      <a target="_blank" href="https://www.linkedin.com/in/marc-addeo/"
+        >LinkedIn</a
+      >
     </nav>
   </Router>
 </header>
@@ -39,7 +41,7 @@
   }
 
   nav :global(a) {
-    padding: 0 .6rem;
+    padding: 0 0.6rem;
 
     &:last-of-type {
       padding-right: 0;
@@ -50,11 +52,11 @@
     padding: 0;
 
     &:before {
-      content: '[';
+      content: "[";
     }
 
     &:after {
-      content: ']';
+      content: "]";
     }
   }
 

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { ArticleList, VerticalLineHeading } from "../components";
-  import type { ArticleInterface } from "../components"
+  import type { ArticleInterface } from "../components";
 
   export let articles: ArticleInterface[] | null = null;
 </script>

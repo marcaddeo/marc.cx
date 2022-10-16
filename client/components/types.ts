@@ -1,28 +1,28 @@
 export interface MetadataInterface {
-  title: string,
-  excerpt?: string,
-  slug?: string,
-  link?: string,
-  published: Date,
-  tags: string[],
+  title: string;
+  excerpt?: string;
+  slug?: string;
+  link?: string;
+  published: Date;
+  tags: string[];
 }
 
 export interface NotFoundErrorInterface {
-  code: number,
-  description: string,
-  reason: string,
+  code: number;
+  description: string;
+  reason: string;
 }
 
 export interface ArticleInterface {
-  metadata?: MetadataInterface,
-  html?: string,
-  error?: NotFoundErrorInterface,
+  metadata?: MetadataInterface;
+  html?: string;
+  error?: NotFoundErrorInterface;
 }
 
 export interface ProjectInterface {
-  metadata?: MetadataInterface,
-  html?: string,
-  error?: NotFoundErrorInterface,
+  metadata?: MetadataInterface;
+  html?: string;
+  error?: NotFoundErrorInterface;
 }
 
 export const enum HeadingType {

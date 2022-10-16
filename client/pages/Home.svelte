@@ -28,7 +28,9 @@
   </section>
 
   <section class="article-list">
-    <VerticalLineHeading heading={HeadingType.H2}>Recent Articles</VerticalLineHeading>
+    <VerticalLineHeading heading={HeadingType.H2}
+      >Recent Articles</VerticalLineHeading
+    >
 
     <ArticleList {articles} articleCount={3} />
   </section>
@@ -40,14 +42,14 @@
     grid-template-areas:
       "greeting"
       "articles";
-    grid-template-rows: .9fr 1fr;
+    grid-template-rows: 0.9fr 1fr;
   }
 
   .greeting-section {
     grid-area: greeting;
     display: grid;
-    grid-template-columns: .9fr;
-    grid-template-rows: .5fr .5fr;;
+    grid-template-columns: 0.9fr;
+    grid-template-rows: 0.5fr 0.5fr;
     grid-template-areas:
       "greeting"
       "intro";

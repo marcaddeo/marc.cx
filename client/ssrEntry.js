@@ -5,4 +5,4 @@ export const ssrEntry = (props) => {
   const { head, html } = App.render(params);
 
   return JSON.stringify({ head, html });
-}
+};

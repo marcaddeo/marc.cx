@@ -15,7 +15,7 @@
       <Tag tag={params.tag} {...props} />
     </Route>
     <Route path="article/:slug" let:params>
-      <Article slug="{params.slug}" {...props} />
+      <Article slug={params.slug} {...props} />
     </Route>
     <Route path="articles">
       <Articles {...props} />
@@ -24,9 +24,9 @@
       <Projects {...props} />
     </Route>
     <Route path="/">
-      <Home  {...props} />
+      <Home {...props} />
     </Route>
-    <Route component="{NotFound}" />
+    <Route component={NotFound} />
   </main>
 </Router>
 

@@ -8,7 +8,7 @@
   onMount(async () => {
     const res = await fetch(`/api/article/${slug}`, {
       headers: {
-        "Accept": "application/json",
+        Accept: "application/json",
       },
     });
 
@@ -17,9 +17,9 @@
 </script>
 
 <article>
-{#if article?.html}
-  {@html article.html}
-{/if}
+  {#if article?.html}
+    {@html article.html}
+  {/if}
 </article>
 
 <style lang="scss">

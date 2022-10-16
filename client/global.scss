@@ -1,15 +1,15 @@
-@import url('https://fonts.googleapis.com/css2?family=Fira+Code&family=Fira+Sans&family=Roboto&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Fira+Code&family=Fira+Sans&family=Roboto&display=swap");
 
-$color-brand: #FD4040;
+$color-brand: #fd4040;
 $color-brand: #857ef1;
 $color-link: $color-brand;
 $color-selection: lighten($color-brand, 12);
-$color-heading-dark: #1A1A1A;
+$color-heading-dark: #1a1a1a;
 $color-text: #363636;
-$color-subtext: #C7C7C7;
-$font-fira-code: 'Fira Code', monospace;
-$font-fira-sans: 'Fira Sans', sans-serif;
-$font-roboto: 'Roboto', sans-serif;
+$color-subtext: #c7c7c7;
+$font-fira-code: "Fira Code", monospace;
+$font-fira-sans: "Fira Sans", sans-serif;
+$font-roboto: "Roboto", sans-serif;
 
 :global {
   ::selection {
@@ -20,12 +20,14 @@ $font-roboto: 'Roboto', sans-serif;
     color: $color-link;
     text-decoration: none;
 
-    &:hover, &:active, &:focus {
+    &:hover,
+    &:active,
+    &:focus {
       color: $color-link;
     }
 
     &:focus {
-      outline: none
+      outline: none;
     }
   }
 
@@ -33,7 +35,7 @@ $font-roboto: 'Roboto', sans-serif;
     display: grid;
     grid-gap: 10px;
     grid-template-columns: 730px;
-    grid-template-rows: .1fr 2fr .1fr;
+    grid-template-rows: 0.1fr 2fr 0.1fr;
     grid-template-areas:
       "header"
       "main"

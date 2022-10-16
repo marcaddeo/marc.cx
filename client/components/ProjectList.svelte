@@ -16,13 +16,15 @@
   {#each projects as project}
     <article>
       <HorizontalDashHeading heading={HeadingType.H3}>
-        <a href="{project.metadata.link}" target="_blank">{project.metadata.title}</a>
+        <a href={project.metadata.link} target="_blank"
+          >{project.metadata.title}</a
+        >
       </HorizontalDashHeading>
       <div>
         <span>
-        {#each project.metadata.tags as tag, i}
-          #{tag}{#if i < (project.metadata.tags.length - 1)},&nbsp;{/if}
-        {/each}
+          {#each project.metadata.tags as tag, i}
+            #{tag}{#if i < project.metadata.tags.length - 1},&nbsp;{/if}
+          {/each}
         </span>
       </div>
       <p>{@html project.html}</p>
@@ -35,7 +37,7 @@
     margin: 3rem 0;
     font-family: $font-fira-code;
 
-    div span  {
+    div span {
       display: block;
       color: lighten($color-brand, 12);
       margin: 1rem 0;
