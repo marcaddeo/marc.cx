@@ -39,11 +39,11 @@ pub struct ArticleCollection {
     #[builder(default = "self.default_articles()")]
     pub articles: Vec<Article>,
     #[serde(skip)]
-    #[builder(setter(into, strip_option), default)]
+    #[builder(setter(into), default)]
     #[allow(dead_code)]
     limit: Option<usize>,
     #[serde(skip)]
-    #[builder(setter(into, strip_option), default)]
+    #[builder(setter(into), default)]
     #[allow(dead_code)]
     tag: Option<String>,
 }

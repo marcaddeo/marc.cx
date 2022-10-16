@@ -28,7 +28,7 @@ pub fn articles() -> content::RawHtml<String> {
 #[get("/article/tag/<tag>")]
 pub fn tag(tag: String) -> (Status, content::RawHtml<String>) {
     let articles = ArticleCollectionBuilder::default()
-        .tag(tag.clone())
+        .tag(Some(tag.clone()))
         .build()
         .unwrap();
     let html = ssr::render(format!("/article/tag/{}", tag), Some(articles.clone()));
@@ -51,7 +51,7 @@ pub fn projects() -> content::RawHtml<String> {
 #[get("/")]
 pub fn home() -> content::RawHtml<String> {
     let articles = ArticleCollectionBuilder::default()
-        .limit(3usize)
+        .limit(Some(3usize))
         .build()
         .unwrap();
     let html = ssr::render("/", Some(articles));

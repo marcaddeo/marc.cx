@@ -1,36 +1,31 @@
-use super::article::{get_article_by_slug, get_articles, Article};
-use super::project::{get_projects, Project};
+use super::article::{Article, ArticleEntry, ArticleCollectionBuilder, SpecificArticle};
+use super::project::{Project, ProjectCollection};
 use rocket::serde::json::Json;
 
 #[get("/article/<slug>", format = "json")]
 pub fn article(slug: String) -> Option<Json<Article>> {
-    match get_article_by_slug(slug) {
-        Some(article) => Some(Json(article)),
-        None => None,
+    let article = SpecificArticle::new(slug);
+
+    match article.article {
+        ArticleEntry::Article(article) => Some(Json(article)),
+        ArticleEntry::NotFound { .. } => None,
     }
 }
 
 #[get("/articles?<limit>&<tag>", format = "json")]
 pub fn articles(limit: Option<usize>, tag: Option<String>) -> Json<Vec<Article>> {
-    let mut articles = get_articles();
+    let collection = ArticleCollectionBuilder::default()
+        .tag(tag)
+        .limit(limit)
+        .build()
+        .unwrap();
 
-    if let Some(tag) = tag {
-        articles = articles
-            .into_iter()
-            .filter(|article| article.metadata.tags.contains(&tag))
-            .collect();
-    }
-
-    if let Some(limit) = limit {
-        if articles.len() > limit {
-            articles = articles[..limit].to_vec();
-        }
-    }
-
-    Json(articles)
+    Json(collection.articles)
 }
 
 #[get("/projects", format = "json")]
 pub fn projects() -> Json<Vec<Project>> {
-    Json(get_projects())
+    let collection = ProjectCollection::new();
+
+    Json(collection.projects)
 }

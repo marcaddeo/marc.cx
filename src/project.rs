@@ -32,7 +32,7 @@ pub struct Project {
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct ProjectCollection {
-    projects: Vec<Project>,
+    pub projects: Vec<Project>,
 }
 
 impl ProjectCollection {
