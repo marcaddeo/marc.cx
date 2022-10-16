@@ -1,8 +1,9 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { Link } from "svelte-routing";
-  import { HorizontalDashHeading, HeadingType } from "./index";
+  import { HeadingType } from "./types";
   import type { ArticleInterface } from "./types";
+  import HorizontalDashHeading from "./HorizontalDashHeading.svelte";
 
   export let articles: ArticleInterface[];
   export let articleCount: number | null = null;
