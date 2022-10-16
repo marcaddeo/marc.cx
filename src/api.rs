@@ -1,4 +1,4 @@
-use super::article::{Article, ArticleEntry, ArticleCollectionBuilder, SpecificArticle};
+use super::article::{Article, ArticleCollectionBuilder, ArticleEntry, SpecificArticle};
 use super::project::{Project, ProjectCollection};
 use rocket::serde::json::Json;
 
