@@ -1,7 +1,8 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { HorizontalDashHeading, HeadingType } from "./index";
+  import HorizontalDashHeading from "./HorizontalDashHeading.svelte";
   import type { ProjectInterface } from "./types";
+  import { HeadingType } from "./types";
 
   export let projects: ProjectInterface[] | null = null;
 

@@ -1,6 +1,8 @@
 use std::path::PathBuf;
 #[macro_use]
 extern crate rocket;
+#[macro_use]
+extern crate derive_builder;
 use rocket::fs::{relative, FileServer};
 use rocket::http::Status;
 use rocket::response::content;
@@ -32,7 +34,7 @@ fn rocket() -> _ {
         // SSR pages.
         .mount(
             "/",
-            routes![page::home, page::article, page::articles, page::projects],
+            routes![page::home, page::article, page::articles, page::tag, page::projects],
         )
         // API endpoints.
         .mount("/api", routes![api::article, api::articles, api::projects])

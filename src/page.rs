@@ -1,4 +1,4 @@
-use super::article::{ArticleCollection, ArticleEntry, SpecificArticle};
+use super::article::{ArticleCollectionBuilder, ArticleEntry, SpecificArticle};
 use super::project::ProjectCollection;
 use super::ssr;
 use rocket::http::Status;
@@ -19,7 +19,19 @@ pub fn article(slug: String) -> (Status, content::RawHtml<String>) {
 
 #[get("/articles")]
 pub fn articles() -> content::RawHtml<String> {
-    let html = ssr::render("/articles", Some(ArticleCollection::new()));
+    let articles = ArticleCollectionBuilder::default().build().unwrap();
+    let html = ssr::render("/articles", Some(articles));
+
+    content::RawHtml(html)
+}
+
+#[get("/article/tag/<tag>")]
+pub fn tag(tag: String) -> content::RawHtml<String> {
+    let articles = ArticleCollectionBuilder::default()
+        .tag(tag.clone())
+        .build()
+        .unwrap();
+    let html = ssr::render(format!("/article/tag/{}", tag), Some(articles));
 
     content::RawHtml(html)
 }
@@ -33,7 +45,11 @@ pub fn projects() -> content::RawHtml<String> {
 
 #[get("/")]
 pub fn home() -> content::RawHtml<String> {
-    let html = ssr::render("/", Some(ArticleCollection::new_ext(3)));
+    let articles = ArticleCollectionBuilder::default()
+        .limit(3usize)
+        .build()
+        .unwrap();
+    let html = ssr::render("/", Some(articles));
 
     content::RawHtml(html)
 }

@@ -32,22 +32,44 @@ pub struct Article {
     pub html: String,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Builder, Serialize, Deserialize, Debug)]
+#[builder(build_fn(private, name = "internal_build"))]
 pub struct ArticleCollection {
+    #[builder(setter(skip))]
+    #[builder(default = "self.default_articles()")]
     articles: Vec<Article>,
+    #[serde(skip)]
+    #[builder(setter(into, strip_option), default)]
+    #[allow(dead_code)]
+    limit: Option<usize>,
+    #[serde(skip)]
+    #[builder(setter(into, strip_option), default)]
+    #[allow(dead_code)]
+    tag: Option<String>,
 }
 
-impl ArticleCollection {
-    pub fn new() -> Self {
-        ArticleCollection {
-            articles: get_articles(),
-        }
+impl ArticleCollectionBuilder {
+    fn default_articles(&self) -> Vec<Article> {
+        get_articles()
     }
 
-    pub fn new_ext(limit: usize) -> Self {
-        ArticleCollection {
-            articles: get_articles()[..limit].to_vec(),
+    pub fn build(&self) -> Result<ArticleCollection, ArticleCollectionBuilderError> {
+        let mut collection = self.internal_build()?;
+
+        if let Some(Some(tag)) = &self.tag {
+            collection.articles = collection.articles
+                .into_iter()
+                .filter(|article| article.metadata.tags.contains(tag))
+                .collect();
         }
+
+        if let Some(Some(limit)) = self.limit {
+            if collection.articles.len() > limit {
+                collection.articles = collection.articles[..limit].to_vec();
+            }
+        }
+
+        Ok(collection)
     }
 }
 

@@ -6,12 +6,18 @@
   import HorizontalDashHeading from "./HorizontalDashHeading.svelte";
 
   export let articles: ArticleInterface[];
+  export let tag: string | null = null;
   export let articleCount: number | null = null;
 
   onMount(async () => {
     const url = new URL("/api/articles", window.location.origin);
-    if (articleCount) {
-      url.search = (new URLSearchParams({limit: String(articleCount)})).toString();
+    const params = {
+      ...(articleCount && { limit: String(articleCount) }),
+      ...(tag && { tag }),
+    };
+
+    if (Object.keys(params).length !== 0) {
+      url.search = (new URLSearchParams(params)).toString();
     }
 
     const res = await fetch(url);
@@ -31,7 +37,7 @@
         ::
         <span>
         {#each article.metadata.tags as tag, i}
-          <a href="/tag/{tag}">#{tag}</a>{#if i < (article.metadata.tags.length - 1)},&nbsp;{/if}
+          <Link to="article/tag/{tag}">#{tag}</Link>{#if i < (article.metadata.tags.length - 1)},&nbsp;{/if}
         {/each}
         </span>
       </div>
@@ -45,9 +51,11 @@
     margin: 3rem 0;
     font-family: $font-fira-code;
 
-    div, div a {
-      color: lighten($color-brand, 12);
-      margin: 1rem 0;
+    :global {
+      div + div, div + div a {
+        color: lighten($color-brand, 12);
+        margin: 1rem 0;
+      }
     }
   }
 </style>

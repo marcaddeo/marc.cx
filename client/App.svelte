@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Router, Route } from "svelte-routing";
   import { Header, Footer } from "./components";
-  import { Home, Article, Articles, Projects, NotFound } from "./pages";
+  import { Home, Article, Articles, Tag, Projects, NotFound } from "./pages";
 
   export let url: string | null = null;
   export let props: object = {};
@@ -11,6 +11,9 @@
 
 <Router {url}>
   <main>
+    <Route path="article/tag/:tag" let:params>
+      <Tag tag={params.tag} {...props} />
+    </Route>
     <Route path="article/:slug" let:params>
       <Article slug="{params.slug}" {...props} />
     </Route>
