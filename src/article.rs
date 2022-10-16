@@ -32,12 +32,12 @@ pub struct Article {
     pub html: String,
 }
 
-#[derive(Builder, Serialize, Deserialize, Debug)]
+#[derive(Builder, Serialize, Deserialize, Debug, Clone)]
 #[builder(build_fn(private, name = "internal_build"))]
 pub struct ArticleCollection {
     #[builder(setter(skip))]
     #[builder(default = "self.default_articles()")]
-    articles: Vec<Article>,
+    pub articles: Vec<Article>,
     #[serde(skip)]
     #[builder(setter(into, strip_option), default)]
     #[allow(dead_code)]

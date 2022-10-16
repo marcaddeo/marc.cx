@@ -26,14 +26,19 @@ pub fn articles() -> content::RawHtml<String> {
 }
 
 #[get("/article/tag/<tag>")]
-pub fn tag(tag: String) -> content::RawHtml<String> {
+pub fn tag(tag: String) -> (Status, content::RawHtml<String>) {
     let articles = ArticleCollectionBuilder::default()
         .tag(tag.clone())
         .build()
         .unwrap();
-    let html = ssr::render(format!("/article/tag/{}", tag), Some(articles));
+    let html = ssr::render(format!("/article/tag/{}", tag), Some(articles.clone()));
 
-    content::RawHtml(html)
+    let status = match articles.articles.len() {
+        0 => Status::NotFound,
+        _ => Status::Ok,
+    };
+
+    (status, content::RawHtml(html))
 }
 
 #[get("/projects")]

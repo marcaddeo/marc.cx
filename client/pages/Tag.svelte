@@ -2,9 +2,12 @@
   import { ArticleList, VerticalLineHeading } from "../components";;
   import type { ArticleInterface } from "../components";
   import Article from "./Article.svelte";
+  import NotFound from "./NotFound.svelte";
 
   export let tag: string | null = null;
   export let articles: ArticleInterface[] | null = null;
+
+  $: component = (articles && !articles.length) ? NotFound : ArticleList;
 </script>
 
 <svelte:head>
@@ -13,11 +16,11 @@
 {/if}
 </svelte:head>
 
-{#if tag}
+{#if articles && articles.length}
   <VerticalLineHeading>#{tag} Articles</VerticalLineHeading>
-
-  <ArticleList {tag} {articles} />
 {/if}
+
+<svelte:component this={component} {tag} bind:articles={articles} />
 
 <style lang="scss">
   // @todo need a bunch of margin/padding up top.
