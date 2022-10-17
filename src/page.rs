@@ -12,7 +12,7 @@ pub fn article(slug: String) -> (Status, content::RawHtml<String>) {
         ArticleEntry::NotFound { .. } => Status::NotFound,
     };
 
-    let html = ssr::render(format!("/article/{}", slug), Some(article));
+    let html = ssr::render(uri!(article(slug)), Some(article));
 
     (status, content::RawHtml(html))
 }
@@ -20,7 +20,7 @@ pub fn article(slug: String) -> (Status, content::RawHtml<String>) {
 #[get("/articles")]
 pub fn articles() -> content::RawHtml<String> {
     let articles = ArticleCollectionBuilder::default().build().unwrap();
-    let html = ssr::render("/articles", Some(articles));
+    let html = ssr::render(uri!(articles()), Some(articles));
 
     content::RawHtml(html)
 }
@@ -31,7 +31,7 @@ pub fn tag(tag: String) -> (Status, content::RawHtml<String>) {
         .tag(Some(tag.clone()))
         .build()
         .unwrap();
-    let html = ssr::render(format!("/article/tag/{}", tag), Some(articles.clone()));
+    let html = ssr::render(uri!(tag(tag)), Some(articles.clone()));
 
     let status = match articles.articles.len() {
         0 => Status::NotFound,
@@ -43,7 +43,7 @@ pub fn tag(tag: String) -> (Status, content::RawHtml<String>) {
 
 #[get("/projects")]
 pub fn projects() -> content::RawHtml<String> {
-    let html = ssr::render("/projects", Some(ProjectCollection::new()));
+    let html = ssr::render(uri!(projects()), Some(ProjectCollection::new()));
 
     content::RawHtml(html)
 }
@@ -54,7 +54,7 @@ pub fn home() -> content::RawHtml<String> {
         .limit(Some(3usize))
         .build()
         .unwrap();
-    let html = ssr::render("/", Some(articles));
+    let html = ssr::render(uri!(home()), Some(articles));
 
     content::RawHtml(html)
 }

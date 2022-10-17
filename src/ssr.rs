@@ -4,7 +4,7 @@ use rocket::fs::relative;
 use serde::{Deserialize, Serialize};
 use ssr_rs::Ssr;
 use std::fs::read_to_string;
-use std::path::PathBuf;
+use rocket::http::uri::Origin;
 
 #[derive(Serialize, Deserialize, Debug)]
 struct SsrOutput {
@@ -13,19 +13,17 @@ struct SsrOutput {
 }
 
 #[derive(Serialize, Deserialize, Debug)]
-struct SsrInput<P, J>
+struct SsrInput<'a, J>
 where
-    P: Into<PathBuf> + Serialize,
     J: Into<serde_json::Value> + Serialize,
 {
-    url: P,
+    url: Origin<'a>,
     #[serde(skip_serializing_if = "Option::is_none")]
     props: Option<J>,
 }
 
-pub fn render<P, J>(path: P, props: Option<J>) -> String
+pub fn render<J>(path: Origin, props: Option<J>) -> String
 where
-    P: Into<PathBuf> + Serialize,
     J: Into<serde_json::Value> + Serialize,
 {
     let params = SsrInput { url: path, props };
