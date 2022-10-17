@@ -1,7 +1,6 @@
 <script lang="ts">
   import { ArticleList, VerticalLineHeading } from "../components";
   import type { ArticleInterface } from "../components";
-  import Article from "./Article.svelte";
   import NotFound from "./NotFound.svelte";
 
   export let tag: string | null = null;
