@@ -1,6 +1,6 @@
+use super::api;
 use super::article::{ArticleCollection, ArticleEntry, SpecificArticle};
 use super::project::ProjectCollection;
-use super::api;
 use super::ssr;
 use rocket::http::Status;
 use rocket::response::content;

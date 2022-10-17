@@ -1,10 +1,10 @@
 use lol_html::html_content::{ContentType, Element};
 use lol_html::{element, rewrite_str, RewriteStrSettings};
 use rocket::fs::relative;
+use rocket::http::uri::Origin;
 use serde::{Deserialize, Serialize};
 use ssr_rs::Ssr;
 use std::fs::read_to_string;
-use rocket::http::uri::Origin;
 
 #[derive(Serialize, Deserialize, Debug)]
 struct SsrOutput {
