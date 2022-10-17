@@ -13,3 +13,6 @@ tags:
 # Rebuilding my blog with Rust, Rocket, and Svelte
 
 Some words.
+
+<code-block language="typescript" code="const add = (a: number, b: number) =&gt; a + b; // comment 
+let str = &quot;String&quot;;" />

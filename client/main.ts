@@ -5,4 +5,5 @@ const app: App = new App({
   hydrate: true,
 });
 
+export { default as CodeBlock } from "./components/CodeBlock.wc.svelte";
 export default app;

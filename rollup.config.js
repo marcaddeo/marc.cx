@@ -39,10 +39,12 @@ export default [
       sourcemap: true,
       format: 'iife',
       name: 'app',
-      file: 'static/build/bundle.js'
+      file: 'static/build/bundle.js',
+      exports: 'named',
     },
     plugins: [
       svelte({
+        exclude: /\.wc\.svelte$/,
         preprocess: sveltePreprocess({
           sourceMap: !production,
           scss: {
@@ -53,6 +55,21 @@ export default [
           // enable run-time checks when not in production
           dev: !production,
           hydratable: true,
+          customElement: false,
+        }
+      }),
+      svelte({
+        include: /\.wc\.svelte$/,
+        preprocess: sveltePreprocess({
+          sourceMap: !production,
+          scss: {
+            prependData: `@import 'client/global.scss';`
+          },
+        }),
+        compilerOptions: {
+          // enable run-time checks when not in production
+          dev: !production,
+          customElement: true,
         }
       }),
       // we'll extract any component CSS out into

@@ -9,6 +9,10 @@ const preprocessOptions = {
 
 module.exports = {
     preprocess: sveltePreprocess(preprocessOptions),
+    compilerOptions: {
+      customElement: true,
+      tag: null,
+    },
 
     // Export this to allow rollup.config.js to inherit the same preprocess options.
     preprocessOptions,
