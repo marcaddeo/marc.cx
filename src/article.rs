@@ -7,6 +7,7 @@ use serde::{Deserialize, Serialize};
 use std::fs::{read_dir, read_to_string};
 use std::path::PathBuf;
 use yaml_front_matter::YamlFrontMatter;
+use rocket::serde::json::Json;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "lowercase")]
@@ -71,6 +72,16 @@ impl ArticleCollectionBuilder {
         }
 
         Ok(collection)
+    }
+}
+
+impl From<Json<Vec<Article>>> for ArticleCollection {
+    fn from(articles: Json<Vec<Article>>) -> Self {
+        Self {
+            articles: articles.into_inner(),
+            limit: None,
+            tag: None,
+        }
     }
 }
 
@@ -145,6 +156,23 @@ impl SpecificArticle {
 impl From<SpecificArticle> for serde_json::Value {
     fn from(value: SpecificArticle) -> Self {
         serde_json::to_value(value).unwrap()
+    }
+}
+
+impl From<Option<Json<Article>>> for SpecificArticle {
+    fn from(article: Option<Json<Article>>) -> Self {
+        match article {
+            Some(article) => Self {
+                article: ArticleEntry::Article(article.into_inner()),
+            },
+            None => Self {
+                article: ArticleEntry::NotFound {
+                    code: 404,
+                    description: String::from("The requested resource could not be found."),
+                    reason: String::from("Not Found"),
+                },
+            },
+        }
     }
 }
 

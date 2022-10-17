@@ -6,6 +6,7 @@ use serde::{Deserialize, Serialize};
 use std::fs::{read_dir, read_to_string};
 use std::path::PathBuf;
 use yaml_front_matter::YamlFrontMatter;
+use rocket::serde::json::Json;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "lowercase")]
@@ -39,6 +40,14 @@ impl ProjectCollection {
     pub fn new() -> Self {
         ProjectCollection {
             projects: get_projects(),
+        }
+    }
+}
+
+impl From<Json<Vec<Project>>> for ProjectCollection {
+    fn from(projects: Json<Vec<Project>>) -> Self {
+        Self {
+            projects: projects.into_inner(),
         }
     }
 }
