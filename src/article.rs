@@ -1,6 +1,6 @@
 use super::ymd_hm_format;
 use chrono::{DateTime, Utc};
-use pulldown_cmark::{html, Options, Parser};
+use pulldown_cmark::{html, Event, Options, Parser, Tag, CodeBlockKind};
 use rocket::fs::relative;
 use rocket::serde::json::Json;
 use serde::ser::{SerializeStruct, SerializeStructVariant};
@@ -209,7 +209,26 @@ fn parse_article(path: PathBuf) -> Article {
     let result = YamlFrontMatter::parse::<ArticleMetadata>(&markdown).unwrap();
     let mut options = Options::empty();
     options.insert(Options::ENABLE_STRIKETHROUGH);
-    let parser = Parser::new_ext(&result.content, options);
+    let mut in_code_block = false;
+    let parser = Parser::new_ext(&result.content, options).map(|event| {
+        // Turn code blocks into <code-block> web components.
+        match event {
+            Event::Start(Tag::CodeBlock(info)) => {
+                in_code_block = true;
+
+                let syntax = match info {
+                    CodeBlockKind::Fenced(ref language) => language.to_string(),
+                    _ => String::from("plaintext"),
+                };
+
+                Event::Html(format!(r#"<code-block language="{}" code=""#, syntax).into())
+            },
+            Event::End(Tag::CodeBlock(_)) => {
+                Event::Html("\"></code-block>".into())
+            },
+            _ => event
+        }
+    });
     let mut html = String::new();
     html::push_html(&mut html, parser);
 
