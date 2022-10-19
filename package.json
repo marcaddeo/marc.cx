@@ -10,6 +10,7 @@
     "fix": "prettier --write ./client"
   },
   "devDependencies": {
+    "@codewithshin/svelte-utterances": "^0.2.2",
     "@rollup/plugin-commonjs": "^17.0.0",
     "@rollup/plugin-node-resolve": "^11.0.0",
     "@rollup/plugin-typescript": "^8.0.0",

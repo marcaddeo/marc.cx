@@ -23,6 +23,11 @@
     chalk "^2.0.0"
     js-tokens "^4.0.0"
 
+"@codewithshin/svelte-utterances@^0.2.2":
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/@codewithshin/svelte-utterances/-/svelte-utterances-0.2.2.tgz#f165b093ad58c40f790038f23094897418229216"
+  integrity sha512-yb/aDEwVMWbAxdoAYhTnUrwzme80v/ifr8z3vX6ssOabm4fqAh45nhtAA2OCWdGMx6jQai8nAXJ3EUYvF8Fq0w==
+
 "@jridgewell/gen-mapping@^0.3.0":
   version "0.3.2"
   resolved "https://registry.yarnpkg.com/@jridgewell/gen-mapping/-/gen-mapping-0.3.2.tgz#c1aedc61e853f2bb9f5dfe6d4442d3b565b253b9"

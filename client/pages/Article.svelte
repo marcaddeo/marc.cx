@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { Utterances } from "@codewithshin/svelte-utterances";
   import { Article } from "../components";
   import type { ArticleInterface } from "../components";
   import NotFound from "./NotFound.svelte";
@@ -16,6 +17,10 @@
 </svelte:head>
 
 <svelte:component this={component} {slug} bind:article />
+
+{#if typeof component === typeof Article}
+  <Utterances reponame="marcaddeo/marc.cx" />
+{/if}
 
 <style lang="scss">
 </style>
