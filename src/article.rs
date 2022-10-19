@@ -209,22 +209,47 @@ fn parse_article(path: PathBuf) -> Article {
     let result = YamlFrontMatter::parse::<ArticleMetadata>(&markdown).unwrap();
     let mut options = Options::empty();
     options.insert(Options::ENABLE_STRIKETHROUGH);
+    let mut code: String = String::new();
     let mut in_code_block = false;
+    let mut syntax: String = String::new();
     let parser = Parser::new_ext(&result.content, options).map(|event| {
-        // Turn code blocks into <code-block> web components.
+        // Turn code blocks into <code-block> web components with <noscript> support.
         match event {
             Event::Start(Tag::CodeBlock(info)) => {
                 in_code_block = true;
+                code = String::new();
 
-                let syntax = match info {
+                syntax = match info {
                     CodeBlockKind::Fenced(ref language) => language.to_string(),
                     _ => String::from("plaintext"),
                 };
 
-                Event::Html(format!(r#"<code-block language="{}" code=""#, syntax).into())
+                Event::Text("".into())
             },
+            Event::Text(text) => {
+                if in_code_block {
+                    code += &text.to_string();
+
+                    Event::Text("".into())
+                }
+                else {
+                    Event::Text(text)
+                }
+            }
             Event::End(Tag::CodeBlock(_)) => {
-                Event::Html("\"></code-block>".into())
+                in_code_block = false;
+
+                code = html_escape::encode_safe(&code).into();
+                let html = format!(
+                    r##"
+                    <noscript><pre><code>{}</code></pre></noscript>
+                    <code-block language="{}" code="{}"></code-block>
+                    "##,
+                    code,
+                    syntax,
+                    code
+                );
+                Event::Html(html.into())
             },
             _ => event
         }

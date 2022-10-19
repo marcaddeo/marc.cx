@@ -11,11 +11,11 @@
 
 <link rel="stylesheet" href="/static/build/bundle.css">
 
-{#if styles[style]}
+{#if style && styles[style]}
   <div>
     {@html styles[style]}
   </div>
-{:else}
+{:else if style}
   <link rel="stylesheet" href="{style}">
 {/if}
 

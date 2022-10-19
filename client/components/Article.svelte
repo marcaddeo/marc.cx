@@ -23,4 +23,18 @@
 </article>
 
 <style lang="scss">
+  :global {
+    pre code {
+      border-radius: 15px;
+    }
+
+    noscript pre code {
+      display: block;
+      overflow-x: auto;
+      padding: 1rem;
+      background-color: $color-noscript-code-bg;
+      color: $color-noscript-code-text;
+      font-family: $font-fira-code;
+    }
+  }
 </style>
