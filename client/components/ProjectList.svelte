@@ -42,5 +42,9 @@
       color: lighten($color-brand, 12);
       margin: 1rem 0;
     }
+
+    p {
+      text-align: justify;
+    }
   }
 </style>

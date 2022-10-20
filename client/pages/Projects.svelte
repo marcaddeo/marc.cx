@@ -9,9 +9,14 @@
   <title>Projects | marc.cx</title>
 </svelte:head>
 
-<VerticalLineHeading>Projects</VerticalLineHeading>
+<div>
+  <VerticalLineHeading>Projects</VerticalLineHeading>
+</div>
 
 <ProjectList {projects} />
 
 <style lang="scss">
+  div {
+    margin: 3rem 0 4rem 0;
+  }
 </style>

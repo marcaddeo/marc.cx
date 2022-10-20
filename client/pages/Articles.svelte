@@ -9,10 +9,14 @@
   <title>Articles | marc.cx</title>
 </svelte:head>
 
-<VerticalLineHeading>Articles</VerticalLineHeading>
+<div>
+  <VerticalLineHeading>Articles</VerticalLineHeading>
+</div>
 
 <ArticleList {articles} />
 
 <style lang="scss">
-  // @todo need a bunch of margin/padding up top.
+  div {
+    margin: 3rem 0 4rem 0;
+  }
 </style>

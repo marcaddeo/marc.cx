@@ -82,6 +82,7 @@
     .intro {
       grid-area: intro;
       font-family: $font-fira-code;
+      text-align: justify;
     }
   }
 
