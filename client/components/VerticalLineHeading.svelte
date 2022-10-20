@@ -44,6 +44,12 @@
           transparent 10px
         );
       }
+
+      @media screen and (max-width: 430px) {
+        & {
+          grid-template-columns: 0.7fr 0.6fr;
+        }
+      }
     }
   }
 </style>

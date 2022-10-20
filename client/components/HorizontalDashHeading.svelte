@@ -22,6 +22,7 @@
       position: relative;
       padding: 1rem 0;
       margin: 0.8rem 0;
+      text-align: justify;
 
       &:after {
         content: "";
