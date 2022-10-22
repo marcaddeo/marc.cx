@@ -170,7 +170,7 @@
         bottom: -8px;
       }
 
-      // Styles for when it turns into an X
+      /* Styles for when it turns into an X */
       &.active span {
         transition-delay: 75ms;
         transform: translate3d(0, 0, 0) rotate(135deg);

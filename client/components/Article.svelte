@@ -37,4 +37,32 @@
       font-family: $font-fira-code;
     }
   }
+
+  article {
+    padding: 2rem 0 4rem 0;
+    font-size: 1.1rem;
+
+    :global {
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        color: $color-brand;
+        text-align: justify;
+        margin: 1rem 0;
+      }
+
+      p {
+        text-align: justify;
+        margin: 0.8rem 0;
+      }
+
+      code {
+        background-color: $color-subtext;
+        padding: 0.3rem 0.4rem;
+      }
+    }
+  }
 </style>
