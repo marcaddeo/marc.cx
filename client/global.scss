@@ -1,6 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Fira+Code&family=Fira+Sans&family=Roboto&display=swap");
 
-$color-brand: #fd4040;
 $color-brand: #857ef1;
 $color-link: $color-brand;
 $color-selection: lighten($color-brand, 12);
@@ -30,6 +29,10 @@ $font-roboto: "Roboto", sans-serif;
 
     &:focus {
       outline: none;
+    }
+
+    &:hover {
+      color: darken($color-link, 22);
     }
   }
 

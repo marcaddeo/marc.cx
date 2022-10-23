@@ -24,8 +24,20 @@
 
 <style lang="scss">
   :global {
+    pre {
+      padding: 0;
+    }
+
     pre code {
       border-radius: 15px;
+      width: calc(100% + 300px);
+      max-width: calc(100vw - 3rem);
+      margin: 2rem 0;
+      box-sizing: border-box;
+      left: 50%;
+      position: relative;
+      transform: translateX(-50%);
+
     }
 
     noscript pre code {
@@ -51,7 +63,12 @@
       h6 {
         color: $color-brand;
         text-align: justify;
-        margin: 1rem 0;
+        margin: 2.5rem 0 1.5rem;
+      }
+
+      h1 {
+        font-size: 2.25rem;
+        margin-bottom: 2.5rem;
       }
 
       p {
@@ -62,6 +79,18 @@
       code {
         background-color: $color-subtext;
         padding: 0.3rem 0.4rem;
+      }
+
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6,
+      p,
+      ul,
+      ol {
+        overflow: hidden;
       }
     }
   }
