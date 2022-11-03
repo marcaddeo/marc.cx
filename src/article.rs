@@ -1,6 +1,6 @@
 use super::ymd_hm_format;
 use chrono::{DateTime, Utc};
-use pulldown_cmark::{html, Event, Options, Parser, Tag, CodeBlockKind};
+use pulldown_cmark::{html, CodeBlockKind, Event, Options, Parser, Tag};
 use rocket::fs::relative;
 use rocket::serde::json::Json;
 use serde::ser::{SerializeStruct, SerializeStructVariant};
@@ -225,14 +225,13 @@ fn parse_article(path: PathBuf) -> Article {
                 };
 
                 Event::Text("".into())
-            },
+            }
             Event::Text(text) => {
                 if in_code_block {
                     code += &text.to_string();
 
                     Event::Text("".into())
-                }
-                else {
+                } else {
                     Event::Text(text)
                 }
             }
@@ -245,13 +244,11 @@ fn parse_article(path: PathBuf) -> Article {
                     <noscript><pre><code>{}</code></pre></noscript>
                     <code-block language="{}" code="{}"></code-block>
                     "##,
-                    code,
-                    syntax,
-                    code
+                    code, syntax, code
                 );
                 Event::Html(html.into())
-            },
-            _ => event
+            }
+            _ => event,
         }
     });
     let mut html = String::new();
