@@ -26,7 +26,7 @@ pub fn articles() -> content::RawHtml<String> {
     content::RawHtml(html)
 }
 
-#[get("/article/tag/<tag>")]
+#[get("/articles/tag/<tag>")]
 pub fn tag(tag: String) -> (Status, content::RawHtml<String>) {
     let collection: ArticleCollection = api::articles(None, Some(tag.clone())).into();
     let html = ssr::render(uri!(tag(tag)), Some(collection.clone()));

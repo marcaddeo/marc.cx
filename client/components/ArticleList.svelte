@@ -41,7 +41,7 @@
         ::
         <span>
           {#each article.metadata.tags as tag, i}
-            <Link to="article/tag/{tag}">#{tag}</Link
+            <Link to="articles/tag/{tag}">#{tag}</Link
             >{#if i < article.metadata.tags.length - 1},&nbsp;{/if}
           {/each}
         </span>

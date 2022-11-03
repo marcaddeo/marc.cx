@@ -11,7 +11,7 @@
 
 <Router {url}>
   <main>
-    <Route path="article/tag/:tag" let:params>
+    <Route path="articles/tag/:tag" let:params>
       <Tag tag={params.tag} {...props} />
     </Route>
     <Route path="article/:slug" let:params>
