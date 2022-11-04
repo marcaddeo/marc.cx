@@ -196,6 +196,7 @@ pub fn get_article_by_slug(slug: String) -> Option<Article> {
         .into_iter()
         .find(|article| article.metadata.slug == slug)
 }
+
 fn parse_article(path: PathBuf) -> Article {
     let markdown = read_to_string(path).unwrap();
     let result = YamlFrontMatter::parse::<ArticleMetadata>(&markdown).unwrap();
