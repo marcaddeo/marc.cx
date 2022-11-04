@@ -58,11 +58,7 @@ impl ArticleCollectionBuilder {
         let mut collection = self.internal_build()?;
 
         if let Some(Some(tag)) = &self.tag {
-            collection.articles = collection
-                .articles
-                .into_iter()
-                .filter(|article| article.metadata.tags.contains(tag))
-                .collect();
+            collection.articles.retain(|article| article.metadata.tags.contains(tag));
         }
 
         if let Some(Some(limit)) = self.limit {
@@ -194,15 +190,7 @@ pub fn get_articles() -> Vec<Article> {
 }
 
 pub fn get_article_by_slug(slug: String) -> Option<Article> {
-    let articles = get_articles();
-
-    for article in articles {
-        if article.metadata.slug == slug {
-            return Some(article);
-        }
-    }
-
-    None
+    get_articles().into_iter().find(|article| article.metadata.slug == slug)
 }
 fn parse_article(path: PathBuf) -> Article {
     let markdown = read_to_string(path).unwrap();
@@ -228,7 +216,7 @@ fn parse_article(path: PathBuf) -> Article {
             }
             Event::Text(text) => {
                 if in_code_block {
-                    code += &text.to_string();
+                    code += &text;
 
                     Event::Text("".into())
                 } else {

@@ -44,6 +44,12 @@ impl ProjectCollection {
     }
 }
 
+impl Default for ProjectCollection {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl From<Json<Vec<Project>>> for ProjectCollection {
     fn from(projects: Json<Vec<Project>>) -> Self {
         Self {
