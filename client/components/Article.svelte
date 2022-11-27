@@ -76,18 +76,12 @@
         margin: 0.8rem 0;
       }
 
-      code {
-        background-color: $color-subtext;
-        padding: 0.3rem 0.4rem;
-      }
-
       h1,
       h2,
       h3,
       h4,
       h5,
       h6,
-      p,
       ul,
       ol {
         overflow: hidden;

@@ -40,7 +40,7 @@ $font-roboto: "Roboto", sans-serif;
     display: grid;
     grid-gap: 10px;
     grid-template-columns: 730px;
-    grid-template-rows: 0.1fr 2fr 0.1fr;
+    grid-template-rows: 0.01fr 2fr 0.1fr;
     grid-template-areas:
       "header"
       "main"
@@ -51,6 +51,11 @@ $font-roboto: "Roboto", sans-serif;
     font-size: 16px;
 
     color: $color-text;
+  }
+
+  code {
+    background-color: $color-subtext;
+    padding: 0.3rem 0.4rem;
   }
 
   @media screen and (max-width: 730px) {

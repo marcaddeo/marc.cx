@@ -8,7 +8,7 @@ tags:
   - changelog
   - markdown
 ---
-`clparse` is a library to parse `CHANGELOG.md` files that use the [keep a
-changelog][] format.
+A command line tool, and library, for parsing `CHANGELOG.md` files that use the
+[keep a changelog][] format
 
 [keep a changelog]: https://keepachangelog.com/en/1.0.0/
