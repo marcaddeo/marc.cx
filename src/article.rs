@@ -213,9 +213,23 @@ pub fn get_article_by_slug(slug: String) -> Option<Article> {
         .find(|article| article.metadata.slug == slug)
 }
 
+macro_rules! markdown_feature {
+    ($event:ident, $($tt:tt)*) => {
+        let $event = if $event.is_some() {
+            match $event.unwrap() {
+                $($tt)*
+                event => Some(event),
+            }
+        } else {
+            None
+        };
+    };
+}
+
 fn parse_article(path: PathBuf) -> Article {
     let markdown = read_to_string(path).unwrap();
-    let result = YamlFrontMatter::parse::<ArticleMetadata>(&markdown).unwrap();
+    let document = YamlFrontMatter::parse::<ArticleMetadata>(&markdown).unwrap();
+
     let mut options = Options::empty();
     options.insert(Options::ENABLE_STRIKETHROUGH);
 
@@ -232,9 +246,13 @@ fn parse_article(path: PathBuf) -> Article {
     let mut in_blockquote = false;
     let mut blockquote_text: String = String::new();
 
-    let parser = Parser::new_ext(&result.content, options).map(|event| {
+    let parser = Parser::new_ext(&document.content, options).filter_map(|event| {
+        let event = Some(event);
+
         // Turn code blocks into <code-block> web components with <noscript> support.
-        let event = match event {
+        markdown_feature! {
+            event,
+
             Event::Start(Tag::CodeBlock(info)) => {
                 in_code_block = true;
                 code = String::new();
@@ -244,15 +262,15 @@ fn parse_article(path: PathBuf) -> Article {
                     _ => String::from("plaintext"),
                 };
 
-                Event::Text("".into())
+                None
             }
             Event::Text(text) => {
                 if in_code_block {
                     code += &text;
 
-                    Event::Text("".into())
+                    None
                 } else {
-                    Event::Text(text)
+                    Some(Event::Text(text))
                 }
             }
             Event::End(Tag::CodeBlock(_)) => {
@@ -261,37 +279,39 @@ fn parse_article(path: PathBuf) -> Article {
                 code = html_escape::encode_safe(&code).into();
                 let html = format!(
                     r##"
-                <noscript><pre><code>{}</code></pre></noscript>
-                <code-block language="{}" code="{}"></code-block>
-                "##,
+                    <noscript><pre><code>{}</code></pre></noscript>
+                    <code-block language="{}" code="{}"></code-block>
+                    "##,
                     code, syntax, code
                 );
-                Event::Html(html.into())
+                Some(Event::Html(html.into()))
             }
-            _ => event,
-        };
+        }
 
         // Handle external links.
-        let event = match event {
+        markdown_feature! {
+            event,
+
             Event::Start(Tag::Link(_, _, _)) => {
                 in_link = true;
                 link_text = String::new();
 
-                Event::Text("".into())
+                None
             }
             Event::Text(text) => {
                 if in_link {
                     link_text += &text;
-                    Event::Text("".into())
+
+                    None
                 } else {
-                    Event::Text(text)
+                    Some(Event::Text(text))
                 }
             }
             Event::End(Tag::Link(_, destination, link_title)) => {
                 in_link = false;
 
-                let is_external =
-                    !(destination.starts_with("/") || destination.starts_with("https://marc.cx"));
+                let is_external = !(destination.starts_with("/")
+                    || destination.starts_with("https://marc.cx"));
 
                 let mut title = String::new();
                 if !link_title.is_empty() {
@@ -311,40 +331,42 @@ fn parse_article(path: PathBuf) -> Article {
                     link_text.trim()
                 );
 
-                Event::Html(html.into())
+                Some(Event::Html(html.into()))
             }
-            _ => event,
-        };
+        }
 
         // GitHub-style blockquote alerts.
-        match event {
+        markdown_feature! {
+            event,
+
             Event::Start(Tag::BlockQuote) => {
                 in_blockquote = true;
                 blockquote_text = String::new();
 
-                Event::Text("".into())
+                None
             }
             Event::SoftBreak => {
                 blockquote_text += "\n";
 
-                Event::SoftBreak
+                None
             }
             Event::Start(Tag::Paragraph) => {
                 blockquote_text += "<p>";
 
-                Event::Text("".into())
+                None
             }
             Event::End(Tag::Paragraph) => {
                 blockquote_text += "</p>";
 
-                Event::Text("".into())
+                None
             }
             Event::Text(text) => {
                 if in_blockquote {
                     blockquote_text += &text;
-                    Event::Text("".into())
+
+                    None
                 } else {
-                    Event::Text(text)
+                    Some(Event::Text(text))
                 }
             }
             Event::End(Tag::BlockQuote) => {
@@ -395,16 +417,18 @@ fn parse_article(path: PathBuf) -> Article {
                     quote,
                 );
 
-                Event::Html(html.into())
+                Some(Event::Html(html.into()))
             }
-            _ => event,
         }
+
+        event
     });
+
     let mut html = String::new();
     html::push_html(&mut html, parser);
 
     Article {
-        metadata: result.metadata,
+        metadata: document.metadata,
         html,
     }
 }
