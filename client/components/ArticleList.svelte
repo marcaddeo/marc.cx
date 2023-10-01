@@ -33,7 +33,7 @@
     <article>
       <HorizontalDashHeading heading={HeadingType.H3}>
         <Link to="article/{article.metadata.slug}"
-          >{article.metadata.title}</Link
+          >{@html article.metadata.title}</Link
         >
       </HorizontalDashHeading>
       <div>

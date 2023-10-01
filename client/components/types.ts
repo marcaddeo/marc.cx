@@ -1,5 +1,6 @@
 export interface MetadataInterface {
   title: string;
+  clean_title?: string;
   excerpt?: string;
   slug?: string;
   link?: string;

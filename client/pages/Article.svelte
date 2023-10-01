@@ -12,7 +12,7 @@
 
 <svelte:head>
   {#if article?.metadata}
-    <title>{article.metadata.title} | marc.cx</title>
+    <title>{article.metadata.clean_title || article.metadata.title} | marc.cx</title>
   {/if}
 </svelte:head>
 

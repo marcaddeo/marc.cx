@@ -19,6 +19,7 @@ pub enum ArticleStatus {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ArticleMetadata {
     pub title: String,
+    pub clean_title: Option<String>,
     pub slug: String,
     pub status: ArticleStatus,
     #[serde(with = "ymd_hm_format")]
