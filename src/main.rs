@@ -44,6 +44,11 @@ fn rocket() -> _ {
         )
         // API endpoints.
         .mount("/api", routes![api::article, api::articles, api::projects])
+        // Article assets.
+        .mount(
+            "/article",
+            FileServer::from(relative!("content/articles")).rank(-2),
+        )
         // Static files.
         .mount("/static", FileServer::from(relative!("static")).rank(-2))
 }
