@@ -218,11 +218,20 @@ fn parse_article(path: PathBuf) -> Article {
     let result = YamlFrontMatter::parse::<ArticleMetadata>(&markdown).unwrap();
     let mut options = Options::empty();
     options.insert(Options::ENABLE_STRIKETHROUGH);
+
+    // Code block handling.
     let mut code: String = String::new();
-    let mut link_text: String = String::new();
     let mut in_code_block = false;
-    let mut in_link = false;
     let mut syntax: String = String::new();
+
+    // Link handling.
+    let mut in_link = false;
+    let mut link_text: String = String::new();
+
+    // Blockquote handling.
+    let mut in_blockquote = false;
+    let mut blockquote_text: String = String::new();
+
     let parser = Parser::new_ext(&result.content, options).map(|event| {
         // Turn code blocks into <code-block> web components with <noscript> support.
         let event = match event {
@@ -263,7 +272,7 @@ fn parse_article(path: PathBuf) -> Article {
         };
 
         // Handle external links.
-        match event {
+        let event = match event {
             Event::Start(Tag::Link(_, _, _)) => {
                 in_link = true;
                 link_text = String::new();
@@ -300,6 +309,90 @@ fn parse_article(path: PathBuf) -> Article {
                     title,
                     external_attributes,
                     link_text.trim()
+                );
+
+                Event::Html(html.into())
+            }
+            _ => event,
+        };
+
+        // GitHub-style blockquote alerts.
+        match event {
+            Event::Start(Tag::BlockQuote) => {
+                in_blockquote = true;
+                blockquote_text = String::new();
+
+                Event::Text("".into())
+            }
+            Event::SoftBreak => {
+                blockquote_text += "\n";
+
+                Event::SoftBreak
+            }
+            Event::Start(Tag::Paragraph) => {
+                blockquote_text += "<p>";
+
+                Event::Text("".into())
+            }
+            Event::End(Tag::Paragraph) => {
+                blockquote_text += "</p>";
+
+                Event::Text("".into())
+            }
+            Event::Text(text) => {
+                if in_blockquote {
+                    blockquote_text += &text;
+                    Event::Text("".into())
+                } else {
+                    Event::Text(text)
+                }
+            }
+            Event::End(Tag::BlockQuote) => {
+                in_blockquote = false;
+
+                let mut lines = blockquote_text.lines();
+                let first_line = lines.next();
+
+                let mut attributes = String::new();
+                let mut class = String::new();
+                let mut quote = String::new();
+
+                if let Some(mut line) = first_line {
+                    if line.starts_with("<p>") {
+                        line = line.strip_prefix("<p>").unwrap();
+                        quote += "<p>";
+                    }
+                    match line {
+                        "[!NOTE]" => {
+                            class = "alert--note".into();
+                        }
+                        "[!IMPORTANT]" => {
+                            class = "alert--important".into();
+                        }
+                        "[!WARNING]" => {
+                            class = "alert--warning".into();
+                        }
+                        _ => (),
+                    }
+
+                    // If this isn't an alert, we need to preserve the first
+                    // line.
+                    if class.is_empty() {
+                        quote += line;
+                    }
+                }
+
+                // Join the remaining lines back together.
+                quote += &lines.collect::<Vec<_>>().join("\n");
+
+                if !class.is_empty() {
+                    attributes += &format!(" class=\"{}\" ", class);
+                }
+
+                let html = format!(
+                    "<blockquote{}>{}</blockquote>",
+                    attributes.trim_end(),
+                    quote,
                 );
 
                 Event::Html(html.into())
