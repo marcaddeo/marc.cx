@@ -19,10 +19,10 @@
     </div>
     <div class="intro">
       <p>
-        I'm a back-end web developer that does stuff and what-not, here's some
-        more words that make me sound good and what not. I like to code with
-        PHP, Rust, JavaScript/TypeScript, Svelte, and other shit and what-not.
-        Maybe this is long enough now?
+        I'm the Director of Technology a
+        <a href="https://mythicdigital.io">Mythic Digital</a>. In my free time
+        I enjoy PC gaming, tinkering with and automating my Homelab with
+        Ansible, coding with Rust, and Cooking.
       </p>
     </div>
   </section>
@@ -42,7 +42,7 @@
     grid-template-areas:
       "greeting"
       "articles";
-    grid-template-rows: 0.9fr 1fr;
+    grid-template-rows: 0.8fr 1fr;
   }
 
   .greeting-section {
