@@ -9,7 +9,7 @@ use std::fs::{read_dir, read_to_string};
 use std::path::PathBuf;
 use yaml_front_matter::YamlFrontMatter;
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq)]
 #[serde(rename_all = "lowercase")]
 pub enum ArticleStatus {
     Published,
@@ -190,6 +190,18 @@ pub fn get_articles() -> Vec<Article> {
         articles.push(parse_article(path));
     }
 
+    let environment = match std::env::var("APP_ENV") {
+        Ok(val) => val,
+        Err(_) => "production".to_string(),
+    };
+
+    // Filter out unpublished articles on Production.
+    if environment == "production" {
+        articles = articles
+            .into_iter()
+            .filter(|article| article.metadata.status == ArticleStatus::Published)
+            .collect();
+    }
     articles.sort_by(|a, b| b.metadata.published.cmp(&a.metadata.published));
     articles
 }
