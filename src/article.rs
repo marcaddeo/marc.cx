@@ -206,11 +206,13 @@ fn parse_article(path: PathBuf) -> Article {
     let mut options = Options::empty();
     options.insert(Options::ENABLE_STRIKETHROUGH);
     let mut code: String = String::new();
+    let mut link_text: String = String::new();
     let mut in_code_block = false;
+    let mut in_link = false;
     let mut syntax: String = String::new();
     let parser = Parser::new_ext(&result.content, options).map(|event| {
         // Turn code blocks into <code-block> web components with <noscript> support.
-        match event {
+        let event = match event {
             Event::Start(Tag::CodeBlock(info)) => {
                 in_code_block = true;
                 code = String::new();
@@ -237,11 +239,56 @@ fn parse_article(path: PathBuf) -> Article {
                 code = html_escape::encode_safe(&code).into();
                 let html = format!(
                     r##"
-                    <noscript><pre><code>{}</code></pre></noscript>
-                    <code-block language="{}" code="{}"></code-block>
-                    "##,
+                <noscript><pre><code>{}</code></pre></noscript>
+                <code-block language="{}" code="{}"></code-block>
+                "##,
                     code, syntax, code
                 );
+                Event::Html(html.into())
+            }
+            _ => event,
+        };
+
+        // Handle external links.
+        match event {
+            Event::Start(Tag::Link(_, _, _)) => {
+                in_link = true;
+                link_text = String::new();
+
+                Event::Text("".into())
+            }
+            Event::Text(text) => {
+                if in_link {
+                    link_text += &text;
+                    Event::Text("".into())
+                } else {
+                    Event::Text(text)
+                }
+            }
+            Event::End(Tag::Link(_, destination, link_title)) => {
+                in_link = false;
+
+                let is_external =
+                    !(destination.starts_with("/") || destination.starts_with("https://marc.cx"));
+
+                let mut title = String::new();
+                if !link_title.is_empty() {
+                    title = format!(" title=\"{}\" ", link_title);
+                }
+                let mut external_attributes = "";
+                if is_external {
+                    external_attributes = r##"target="_blank" rel="noopener" class="external""##
+                }
+                let html = format!(
+                    r##"
+                    <a href="{}"{}{}>{}</a>
+                    "##,
+                    destination,
+                    title,
+                    external_attributes,
+                    link_text.trim()
+                );
+
                 Event::Html(html.into())
             }
             _ => event,
