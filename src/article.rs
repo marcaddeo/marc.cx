@@ -179,8 +179,11 @@ pub fn get_articles() -> Vec<Article> {
 
     for element in read_dir(relative!("content/articles")).unwrap() {
         let path = element.unwrap().path();
-        let extension = path.extension().unwrap();
-        if extension != "md" {
+        if let Some(extension) = path.extension() {
+            if extension != "md" {
+                continue;
+            }
+        } else {
             continue;
         }
 
