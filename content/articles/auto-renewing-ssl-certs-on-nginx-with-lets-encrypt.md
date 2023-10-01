@@ -1,5 +1,6 @@
 ---
-title: Auto Renewing SSL Certs on NGINX with Let's Encrypt
+title: <s>Auto Renewing SSL Certs on NGINX with Let's Encrypt</s>
+clean_title: Auto Renewing SSL Certs on NGINX with Let's Encrypt
 slug: auto-renewing-ssl-certs-on-nginx-with-lets-encrypt
 status: published
 published: 2015-12-12 00:00
