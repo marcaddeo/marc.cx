@@ -9,6 +9,10 @@ tags:
   - linux
   - devops
 ---
+
+> [!WARNING]
+> This article is out of date and should not longer be used.
+
 # Auto Renewing SSL Certs on NGINX with Let's Encrypt
 
 [Let's Encrypt][] has recently entered a public beta and I've been really excited
