@@ -19,6 +19,8 @@
     </svg>
     <span>{type}</span>
   </header>
+  <!-- hack to allow styling of dynamic content -->
+  {#if true == false}<p></p>{/if}
 
   {@html value}
 </div>
@@ -37,12 +39,12 @@
   );
 
   div {
-    border-left: 0.25rem solid black;
-    padding: 0 1rem;
+    background-color: #f9f9fa;
+    border-left: 3.5px solid black;
+    padding: 12px 14px;
     margin: 20px 0;
 
-    :global(p) {
-      color: red;
+    p {
       &:first-of-type {
         margin-top: 0;
       }
@@ -51,12 +53,24 @@
       }
     }
 
-    header span {
-      &::first-letter {
-        text-transform: capitalize;
+    header {
+      margin-bottom: 8px;
+
+      svg {
+        margin-right: 4px;
+        vertical-align: text-bottom;
+        height: 20px;
+        width: 20px;
       }
 
-      display: inline-block;
+      span {
+        &::first-letter {
+          text-transform: capitalize;
+        }
+
+        font-weight: 500;
+        display: inline-block;
+      }
     }
   }
 
