@@ -6,4 +6,5 @@ const app: App = new App({
 });
 
 export { default as CodeBlock } from "./components/CodeBlock.wc.svelte";
+export { default as Alert } from "./components/Alert.wc.svelte";
 export default app;

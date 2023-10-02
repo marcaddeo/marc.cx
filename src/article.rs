@@ -375,8 +375,7 @@ fn parse_article(path: PathBuf) -> Article {
                 let mut lines = blockquote_text.lines();
                 let first_line = lines.next();
 
-                let mut attributes = String::new();
-                let mut class = String::new();
+                let mut alert_type = String::new();
                 let mut quote = String::new();
 
                 if let Some(mut line) = first_line {
@@ -386,20 +385,20 @@ fn parse_article(path: PathBuf) -> Article {
                     }
                     match line {
                         "[!NOTE]" => {
-                            class = "alert--note".into();
+                            alert_type = "note".into();
                         }
                         "[!IMPORTANT]" => {
-                            class = "alert--important".into();
+                            alert_type = "important".into();
                         }
                         "[!WARNING]" => {
-                            class = "alert--warning".into();
+                            alert_type = "warning".into();
                         }
                         _ => (),
                     }
 
                     // If this isn't an alert, we need to preserve the first
                     // line.
-                    if class.is_empty() {
+                    if alert_type.is_empty() {
                         quote += line;
                     }
                 }
@@ -407,15 +406,19 @@ fn parse_article(path: PathBuf) -> Article {
                 // Join the remaining lines back together.
                 quote += &lines.collect::<Vec<_>>().join("\n");
 
-                if !class.is_empty() {
-                    attributes += &format!(" class=\"{}\" ", class);
+                let mut html = format!("<blockquote>{}</blockquote>", quote);
+                if !alert_type.is_empty() {
+                    html = format!(
+                        r##"
+                        <noscript><blockquote class="alert--{}">{}</blockquote></noscript>
+                        <alert-block type="{}" value="{}"></alert-block>
+                        "##,
+                        alert_type,
+                        quote,
+                        alert_type,
+                        quote,
+                    );
                 }
-
-                let html = format!(
-                    "<blockquote{}>{}</blockquote>",
-                    attributes.trim_end(),
-                    quote,
-                );
 
                 Some(Event::Html(html.into()))
             }
