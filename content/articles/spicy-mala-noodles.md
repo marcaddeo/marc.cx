@@ -6,6 +6,8 @@ published: 2023-10-01 00:00
 excerpt: A quick and delicious mouth-numbing noodle dish
 bear: true
 tags:
+  - food
+  - cooking
   - recipe
   - chinese food
   - noodles
