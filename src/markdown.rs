@@ -24,9 +24,7 @@ struct HtmlWriter<'a, I, W> {
     /// Whether or not the last write wrote a newline.
     end_newline: bool,
 
-    buffers: HashMap<String, String>,
-    current_buffer: Option<String>,
-
+    buffers: Vec<String>,
     table_state: TableState,
     table_alignments: Vec<Alignment>,
     table_cell_index: usize,
@@ -43,8 +41,7 @@ where
             iter,
             writer,
             end_newline: true,
-            buffers: HashMap::new(),
-            current_buffer: None,
+            buffers: vec![],
             table_state: TableState::Head,
             table_alignments: vec![],
             table_cell_index: 0,
@@ -61,13 +58,8 @@ where
     /// Writes a buffer, and tracks whether or not a newline was written.
     #[inline]
     fn write(&mut self, s: &str) -> io::Result<()> {
-        if let Some(tag) = &self.current_buffer {
-            if self.buffers.get(tag).is_none() {
-                self.buffers.insert(tag.into(), s.into());
-            } else {
-                let current = self.buffers.get_mut(tag).unwrap();
-                current.push_str(s);
-            }
+        if let Some(current_buffer) = &mut self.buffers.last_mut() {
+            current_buffer.push_str(s);
         } else {
             self.writer.write_str(s)?;
         }
@@ -216,12 +208,7 @@ where
                 // } else {
                 //     self.write("\n<blockquote>\n")
                 // }
-
-                self.current_buffer = Some("blockquote".into());
-                *self
-                    .buffers
-                    .entry("blockquote".into())
-                    .or_insert(String::new()) = String::new();
+                self.buffers.push(String::new());
 
                 Ok(())
             }
@@ -230,11 +217,7 @@ where
                     self.write_newline()?;
                 }
 
-                self.current_buffer = Some("codeblock".into());
-                *self
-                    .buffers
-                    .entry("codeblock".into())
-                    .or_insert(String::new()) = String::new();
+                self.buffers.push(String::new());
 
                 Ok(())
 
@@ -298,8 +281,7 @@ where
                 self.write("\">")
             }
             Tag::Link(_link_type, _dest, _title) => {
-                self.current_buffer = Some("link".into());
-                *self.buffers.entry("link".into()).or_insert(String::new()) = String::new();
+                self.buffers.push(String::new());
 
                 Ok(())
                 // self.write("<a href=\"")?;
@@ -369,7 +351,7 @@ where
                 self.table_cell_index += 1;
             }
             Tag::BlockQuote => {
-                let blockquote = self.buffers.get_mut("blockquote").unwrap().clone();
+                let blockquote = self.buffers.pop().unwrap();
                 let mut lines = blockquote.lines();
                 let first_line = lines.next();
 
@@ -404,8 +386,6 @@ where
                 // Join the remaining lines back together.
                 quote += &lines.collect::<Vec<_>>().join("\n");
 
-                self.current_buffer = None;
-
                 if self.end_newline {
                     self.write("<noscript><blockquote class=\"alert--")?;
                 } else {
@@ -437,8 +417,7 @@ where
                     _ => (),
                 };
 
-                self.current_buffer = None;
-                let code = self.buffers.get_mut("codeblock").unwrap().clone();
+                let code = self.buffers.pop().unwrap();
 
                 self.write("<noscript><pre><code class=\"language-")?;
                 self.write_escape(language)?;
@@ -470,8 +449,7 @@ where
                 self.write("</del>")?;
             }
             Tag::Link(_, dest, title) => {
-                self.current_buffer = None;
-                let inner = self.buffers.get_mut("link").unwrap().clone();
+                let inner = self.buffers.pop().unwrap();
                 let is_external = !(dest.starts_with("/") || dest.starts_with("https://marc.cx"));
 
                 self.write("<a href=\"")?;
