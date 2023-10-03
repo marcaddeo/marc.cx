@@ -55,7 +55,7 @@ where
     /// Writes a new line.
     fn write_newline(&mut self) -> io::Result<()> {
         self.end_newline = true;
-        self.writer.write_str("\n")
+        self.write("\n")
     }
 
     /// Writes a buffer, and tracks whether or not a newline was written.
