@@ -7,6 +7,10 @@ excerpt: In which I make the first blog article on my new site. A short introduc
 tags:
   - elixir
 ---
+> [!NOTE]
+> I rewrote my blog in Rust and Svelte! Someday I'll write an article about it
+> :smile:
+
 # Hello World!
 
 I've decided to start a blog. It's an idea that I play with every so often, and
