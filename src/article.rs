@@ -245,6 +245,9 @@ fn parse_article(path: PathBuf) -> Article {
         document.content = lines.join("\n");
     }
 
+    let replacer = node_emoji::Replacer::new();
+    document.content = replacer.replace_all(&document.content).to_string();
+
     let mut options = Options::empty();
     options.insert(Options::ENABLE_STRIKETHROUGH);
 
