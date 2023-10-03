@@ -6,8 +6,6 @@ published: 2023-10-01 00:00
 excerpt: A quick and delicious mouth-numbing noodle dish
 bear: true
 tags:
-  - food
-  - cooking
   - recipe
   - chinese food
   - noodles
@@ -17,6 +15,7 @@ tags:
 # Spicy Mala Noodles
 
 ![](spicy-mala-noodles/IMG_6161.jpeg)
+
 ## Ingredients
 * 1 pack [noodles](https://www.amazon.com/gp/product/B08TQPX37T)
 * 4 pieces of [dried shiitake mushroom](https://www.amazon.com/dp/B00PXRL3D8), sliced into small slivers
