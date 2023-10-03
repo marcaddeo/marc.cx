@@ -70,6 +70,7 @@ where
         Ok(())
     }
 
+    #[inline]
     fn write_escape(&mut self, s: &str) -> io::Result<()> {
         let mut escaped: String = String::new();
         escape_html(&mut escaped, &s)?;
@@ -77,6 +78,7 @@ where
         self.write(&escaped)
     }
 
+    #[inline]
     fn write_escape_href(&mut self, s: &str) -> io::Result<()> {
         let mut escaped: String = String::new();
         escape_href(&mut escaped, &s)?;
