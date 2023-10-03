@@ -223,7 +223,11 @@ fn parse_article(path: PathBuf) -> Article {
 
     let parser = Parser::new_ext(&document.content, options);
     let mut html = String::new();
-    markdown::push_html(&mut html, parser);
+    let mut options = markdown::Options::empty();
+    options.insert(markdown::Options::ENABLE_CUSTOM_CODEBLOCKS);
+    options.insert(markdown::Options::ENABLE_EXTERNAL_LINK_HANDLING);
+    options.insert(markdown::Options::ENABLE_GITHUB_FLAVORED_BLOCKQUOTE_ALERTS);
+    markdown::push_html(&mut html, parser, options);
 
     Article {
         metadata: document.metadata,

@@ -9,6 +9,16 @@ use pulldown_cmark::CowStr;
 use pulldown_cmark::Event::*;
 use pulldown_cmark::{Alignment, CodeBlockKind, Event, LinkType, Tag};
 
+bitflags::bitflags! {
+    /// Option struct containing flags for enabling extra features
+    /// that are not part of the CommonMark spec.
+    pub struct Options: u32 {
+        const ENABLE_CUSTOM_CODEBLOCKS = 1 << 1;
+        const ENABLE_EXTERNAL_LINK_HANDLING = 1 << 2;
+        const ENABLE_GITHUB_FLAVORED_BLOCKQUOTE_ALERTS = 1 << 3;
+    }
+}
+
 enum TableState {
     Head,
     Body,
@@ -24,6 +34,7 @@ struct HtmlWriter<'a, I, W> {
     /// Whether or not the last write wrote a newline.
     end_newline: bool,
 
+    options: Options,
     buffers: Vec<String>,
     table_state: TableState,
     table_alignments: Vec<Alignment>,
@@ -36,11 +47,12 @@ where
     I: Iterator<Item = Event<'a>>,
     W: StrWrite,
 {
-    fn new(iter: I, writer: W) -> Self {
+    fn new(iter: I, writer: W, options: Options) -> Self {
         Self {
             iter,
             writer,
             end_newline: true,
+            options,
             buffers: vec![],
             table_state: TableState::Head,
             table_alignments: vec![],
@@ -205,40 +217,46 @@ where
                 }
             }
             Tag::BlockQuote => {
-                // if self.end_newline {
-                //     self.write("<blockquote>\n")
-                // } else {
-                //     self.write("\n<blockquote>\n")
-                // }
-                self.buffers.push(String::new());
+                if !self
+                    .options
+                    .contains(Options::ENABLE_GITHUB_FLAVORED_BLOCKQUOTE_ALERTS)
+                {
+                    if self.end_newline {
+                        self.write("<blockquote>\n")
+                    } else {
+                        self.write("\n<blockquote>\n")
+                    }
+                } else {
+                    self.buffers.push(String::new());
 
-                Ok(())
+                    Ok(())
+                }
             }
-            Tag::CodeBlock(_) => {
+            Tag::CodeBlock(info) => {
                 if !self.end_newline {
                     self.write_newline()?;
                 }
 
-                self.buffers.push(String::new());
+                if !self.options.contains(Options::ENABLE_CUSTOM_CODEBLOCKS) {
+                    match info {
+                        CodeBlockKind::Fenced(info) => {
+                            let lang = info.split(' ').next().unwrap();
 
-                Ok(())
+                            if lang.is_empty() {
+                                self.write("<pre><code>")
+                            } else {
+                                self.write("<pre><code class=\"language-")?;
+                                self.write_escape(lang)?;
+                                self.write("\">")
+                            }
+                        }
+                        CodeBlockKind::Indented => self.write("<pre><code>"),
+                    }
+                } else {
+                    self.buffers.push(String::new());
 
-                // match info {
-                //     CodeBlockKind::Fenced(info) => {
-                //         let lang = info.split(' ').next().unwrap();
-
-                //         if lang.is_empty() {
-                //             self.write("<pre><code>")
-                //         } else {
-                //             self.write("<pre><code class=\"language-")?;
-                //             self.write_escape(lang)?;
-                //             self.write("\">")
-                //         }
-                //     }
-                //     CodeBlockKind::Indented => {
-                //         self.write("<pre><code>")
-                //     }
-                // }
+                    Ok(())
+                }
             }
             Tag::List(Some(1)) => {
                 if self.end_newline {
@@ -282,17 +300,23 @@ where
                 }
                 self.write("\">")
             }
-            Tag::Link(_link_type, _dest, _title) => {
-                self.buffers.push(String::new());
+            Tag::Link(_link_type, dest, title) => {
+                if !self
+                    .options
+                    .contains(Options::ENABLE_EXTERNAL_LINK_HANDLING)
+                {
+                    self.write("<a href=\"")?;
+                    self.write_escape_href(&dest)?;
+                    if !title.is_empty() {
+                        self.write("\" title=\"")?;
+                        self.write_escape(&title)?;
+                    }
+                    self.write("\">")
+                } else {
+                    self.buffers.push(String::new());
 
-                Ok(())
-                // self.write("<a href=\"")?;
-                // self.write_escape_href(&dest)?;
-                // if !title.is_empty() {
-                //     self.write("\" title=\"")?;
-                //     self.write_escape(&title)?;
-                // }
-                // self.write("\">")
+                    Ok(())
+                }
             }
             Tag::Image(_link_type, dest, title) => {
                 self.write("<img src=\"")?;
@@ -353,84 +377,95 @@ where
                 self.table_cell_index += 1;
             }
             Tag::BlockQuote => {
-                let blockquote = self.buffers.pop().unwrap();
-                let mut lines = blockquote.lines();
-                let first_line = lines.next();
-
-                let mut alert_type = String::new();
-                let mut quote = String::new();
-
-                if let Some(mut line) = first_line {
-                    if line.starts_with("<p>") {
-                        line = line.strip_prefix("<p>").unwrap();
-                        quote += "<p>";
-                    }
-                    match line {
-                        "[!NOTE]" => {
-                            alert_type = "note".into();
-                        }
-                        "[!IMPORTANT]" => {
-                            alert_type = "important".into();
-                        }
-                        "[!WARNING]" => {
-                            alert_type = "warning".into();
-                        }
-                        _ => (),
-                    }
-
-                    // If this isn't an alert, we need to preserve the first
-                    // line.
-                    if alert_type.is_empty() {
-                        quote += line;
-                    }
-                }
-
-                // Join the remaining lines back together.
-                quote += &lines.collect::<Vec<_>>().join("\n");
-
-                if self.end_newline {
-                    self.write("<noscript><blockquote class=\"alert--")?;
+                if !self
+                    .options
+                    .contains(Options::ENABLE_GITHUB_FLAVORED_BLOCKQUOTE_ALERTS)
+                {
+                    self.write("</blockquote>\n")?;
                 } else {
-                    self.write("\n<noscript><blockquote class=\"alert--")?;
-                }
-                self.write_escape(&alert_type)?;
-                self.write("\">\n")?;
-                self.write(&quote)?;
-                self.write("</blockquote></noscript>\n")?;
+                    let blockquote = self.buffers.pop().unwrap();
+                    let mut lines = blockquote.lines();
+                    let first_line = lines.next();
 
-                if self.end_newline {
-                    self.write("<alert-block type=\"")?;
-                } else {
-                    self.write("\n<alert-block type=\"")?;
+                    let mut alert_type = String::new();
+                    let mut quote = String::new();
+
+                    if let Some(mut line) = first_line {
+                        if line.starts_with("<p>") {
+                            line = line.strip_prefix("<p>").unwrap();
+                            quote += "<p>";
+                        }
+                        match line {
+                            "[!NOTE]" => {
+                                alert_type = "note".into();
+                            }
+                            "[!IMPORTANT]" => {
+                                alert_type = "important".into();
+                            }
+                            "[!WARNING]" => {
+                                alert_type = "warning".into();
+                            }
+                            _ => (),
+                        }
+
+                        // If this isn't an alert, we need to preserve the first
+                        // line.
+                        if alert_type.is_empty() {
+                            quote += line;
+                        }
+                    }
+
+                    // Join the remaining lines back together.
+                    quote += &lines.collect::<Vec<_>>().join("\n");
+
+                    if self.end_newline {
+                        self.write("<noscript><blockquote class=\"alert--")?;
+                    } else {
+                        self.write("\n<noscript><blockquote class=\"alert--")?;
+                    }
+                    self.write_escape(&alert_type)?;
+                    self.write("\">\n")?;
+                    self.write(&quote)?;
+                    self.write("</blockquote></noscript>\n")?;
+
+                    if self.end_newline {
+                        self.write("<alert-block type=\"")?;
+                    } else {
+                        self.write("\n<alert-block type=\"")?;
+                    }
+                    self.write_escape(&alert_type)?;
+                    self.write("\" value=\"")?;
+                    self.write_escape(&quote)?;
+                    self.write("\">\n")?;
+                    self.write("</alert-block>")?;
                 }
-                self.write_escape(&alert_type)?;
-                self.write("\" value=\"")?;
-                self.write_escape(&quote)?;
-                self.write("\">\n")?;
-                self.write("</alert-block>")?;
             }
             Tag::CodeBlock(info) => {
-                let mut language = "plaintext";
-                match info {
-                    CodeBlockKind::Fenced(ref info) => {
-                        let lang = info.split(' ').next().unwrap();
-                        language = lang;
-                    }
-                    _ => (),
-                };
+                if !self.options.contains(Options::ENABLE_CUSTOM_CODEBLOCKS) {
+                    self.write("</code></pre>\n")?;
+                } else {
+                    let mut language = "plaintext";
+                    match info {
+                        CodeBlockKind::Fenced(ref info) => {
+                            let lang = info.split(' ').next().unwrap();
+                            language = lang;
+                        }
+                        _ => (),
+                    };
 
-                let code = self.buffers.pop().unwrap();
+                    let code = self.buffers.pop().unwrap();
 
-                self.write("<noscript><pre><code class=\"language-")?;
-                self.write_escape(language)?;
-                self.write("\">")?;
-                self.write(&code)?;
-                self.write("</code></pre></noscript>")?;
-                self.write("<code-block language=\"")?;
-                self.write_escape(language)?;
-                self.write("\" code=\"")?;
-                self.write(&code)?;
-                self.write("\"></code-block>")?;
+                    self.write("<noscript><pre><code class=\"language-")?;
+                    self.write_escape(language)?;
+                    self.write("\">")?;
+                    self.write(&code)?;
+                    self.write("</code></pre></noscript>")?;
+                    self.write("<code-block language=\"")?;
+                    self.write_escape(language)?;
+                    self.write("\" code=\"")?;
+                    self.write(&code)?;
+                    self.write("\"></code-block>")?;
+                }
             }
             Tag::List(Some(_)) => {
                 self.write("</ol>\n")?;
@@ -451,21 +486,29 @@ where
                 self.write("</del>")?;
             }
             Tag::Link(_, dest, title) => {
-                let inner = self.buffers.pop().unwrap();
-                let is_external = !(dest.starts_with("/") || dest.starts_with("https://marc.cx"));
+                if !self
+                    .options
+                    .contains(Options::ENABLE_EXTERNAL_LINK_HANDLING)
+                {
+                    self.write("</a>")?;
+                } else {
+                    let inner = self.buffers.pop().unwrap();
+                    let is_external =
+                        !(dest.starts_with("/") || dest.starts_with("https://marc.cx"));
 
-                self.write("<a href=\"")?;
-                self.write_escape_href(&dest)?;
-                if !title.is_empty() {
-                    self.write("\" title=\"")?;
-                    self.write_escape(&title)?;
+                    self.write("<a href=\"")?;
+                    self.write_escape_href(&dest)?;
+                    if !title.is_empty() {
+                        self.write("\" title=\"")?;
+                        self.write_escape(&title)?;
+                    }
+                    if is_external {
+                        self.write("\" target=\"_blank\" rel=\"noopener\" class=\"external")?;
+                    }
+                    self.write("\">")?;
+                    self.write(&inner)?;
+                    self.write("</a>")?;
                 }
-                if is_external {
-                    self.write("\" target=\"_blank\" rel=\"noopener\" class=\"external")?;
-                }
-                self.write("\">")?;
-                self.write(&inner)?;
-                self.write("</a>")?;
             }
             Tag::Image(_, _, _) => (), // shouldn't happen, handled in start
             Tag::FootnoteDefinition(_) => {
@@ -534,11 +577,11 @@ where
 /// </ul>
 /// "#);
 /// ```
-pub fn push_html<'a, I>(s: &mut String, iter: I)
+pub fn push_html<'a, I>(s: &mut String, iter: I, options: Options)
 where
     I: Iterator<Item = Event<'a>>,
 {
-    HtmlWriter::new(iter, s).run().unwrap();
+    HtmlWriter::new(iter, s, options).run().unwrap();
 }
 
 /// Iterate over an `Iterator` of `Event`s, generate HTML for each `Event`, and
@@ -574,10 +617,10 @@ where
 /// </ul>
 /// "#);
 /// ```
-pub fn write_html<'a, I, W>(writer: W, iter: I) -> io::Result<()>
+pub fn write_html<'a, I, W>(writer: W, iter: I, options: Options) -> io::Result<()>
 where
     I: Iterator<Item = Event<'a>>,
     W: Write,
 {
-    HtmlWriter::new(iter, WriteWrapper(writer)).run()
+    HtmlWriter::new(iter, WriteWrapper(writer), options).run()
 }
