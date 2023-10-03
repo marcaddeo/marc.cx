@@ -843,6 +843,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "indoc"
+version = "2.0.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1e186cfbae8084e513daff4240b4797e342f988cecda4fb6c939150f96315fd8"
+
+[[package]]
 name = "inlinable_string"
 version = "0.1.15"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -974,6 +980,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "map-macro"
+version = "0.2.6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7c2efbd1385acc8dad8a2e56558e58d949d777741fe110f2ddf3472671dbe3e6"
+
+[[package]]
 name = "marccx"
 version = "0.1.0"
 dependencies = [
@@ -982,7 +994,9 @@ dependencies = [
  "derive_builder",
  "grass",
  "html-escape",
+ "indoc",
  "lol_html",
+ "map-macro",
  "pulldown-cmark",
  "rocket",
  "serde",

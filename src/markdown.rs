@@ -1,6 +1,8 @@
 //! HTML renderer that takes an iterator of events as input.
 //! Based on the default pulldown_cmark html renderer.
 
+use indoc::formatdoc;
+use map_macro::hash_map_e;
 use std::collections::HashMap;
 use std::io::{self, Write};
 
@@ -418,53 +420,45 @@ where
                     // Join the remaining lines back together.
                     quote += &lines.collect::<Vec<_>>().join("\n");
 
-                    if self.end_newline {
-                        self.write("<noscript><blockquote class=\"alert--")?;
-                    } else {
-                        self.write("\n<noscript><blockquote class=\"alert--")?;
-                    }
-                    self.write_escape(&alert_type)?;
-                    self.write("\">\n")?;
-                    self.write(&quote)?;
-                    self.write("</blockquote></noscript>\n")?;
+                    let mut escaped_quote = String::new();
+                    escape_html(&mut escaped_quote, &quote)?;
 
-                    if self.end_newline {
-                        self.write("<alert-block type=\"")?;
-                    } else {
-                        self.write("\n<alert-block type=\"")?;
-                    }
-                    self.write_escape(&alert_type)?;
-                    self.write("\" value=\"")?;
-                    self.write_escape(&quote)?;
-                    self.write("\">\n")?;
-                    self.write("</alert-block>")?;
+                    let html = formatdoc! {r#"
+                        {nl}<noscript><blockquote class="alert--{alert_type}">{quote}</blockquote></noscript>
+                        <alert-block type="{alert_type}" value="{escaped_quote}"></alert-block>{nl}
+                        "#,
+                        nl = if self.end_newline { "\n" } else { "" },
+                        alert_type = alert_type,
+                        quote = quote,
+                        escaped_quote = escaped_quote,
+                    };
+
+                    self.write(&html)?;
                 }
             }
             Tag::CodeBlock(info) => {
                 if !self.options.contains(Options::ENABLE_CUSTOM_CODEBLOCKS) {
                     self.write("</code></pre>\n")?;
                 } else {
-                    let mut language = "plaintext";
-                    match info {
-                        CodeBlockKind::Fenced(ref info) => {
-                            let lang = info.split(' ').next().unwrap();
-                            language = lang;
-                        }
-                        _ => (),
+                    let lang = match info {
+                        CodeBlockKind::Fenced(ref info) => info.split(' ').next().unwrap(),
+                        _ => "plaintext",
                     };
 
-                    let code = self.buffers.pop().unwrap();
+                    let mut escaped_lang = String::new();
+                    escape_html(&mut escaped_lang, &lang)?;
 
-                    self.write("<noscript><pre><code class=\"language-")?;
-                    self.write_escape(language)?;
-                    self.write("\">")?;
-                    self.write(&code)?;
-                    self.write("</code></pre></noscript>")?;
-                    self.write("<code-block language=\"")?;
-                    self.write_escape(language)?;
-                    self.write("\" code=\"")?;
-                    self.write(&code)?;
-                    self.write("\"></code-block>")?;
+                    let code = self.buffers.pop().unwrap();
+                    let html = formatdoc! {r#"
+                        <noscript><pre><code class="language--{lang}">{code}</code></pre></noscript>
+                        <code-block language="{lang}" code="{code}"></code-block>
+                        "#,
+                        code = code,
+                        lang = escaped_lang,
+                    };
+
+                    self.write(&html)?;
+                    self.write("\n")?;
                 }
             }
             Tag::List(Some(_)) => {
@@ -496,18 +490,32 @@ where
                     let is_external =
                         !(dest.starts_with("/") || dest.starts_with("https://marc.cx"));
 
-                    self.write("<a href=\"")?;
-                    self.write_escape_href(&dest)?;
+                    let mut link_attributes: HashMap<&str, &str> = hash_map_e! {
+                        "href" => &dest,
+                    };
+
                     if !title.is_empty() {
-                        self.write("\" title=\"")?;
-                        self.write_escape(&title)?;
+                        link_attributes.insert("title", &title);
                     }
+
                     if is_external {
-                        self.write("\" target=\"_blank\" rel=\"noopener\" class=\"external")?;
+                        link_attributes.insert("target", "_blank");
+                        link_attributes.insert("rel", "noopener");
+                        link_attributes.insert("class", "external");
                     }
-                    self.write("\">")?;
-                    self.write(&inner)?;
-                    self.write("</a>")?;
+
+                    let mut attributes = String::new();
+                    for (key, value) in &link_attributes {
+                        attributes += &format!(r#" {}="{}""#, key, value);
+                    }
+
+                    let html = format!(
+                        r#"<a{attributes}>{inner_text}</a>"#,
+                        attributes = attributes,
+                        inner_text = inner,
+                    );
+
+                    self.write(&html)?;
                 }
             }
             Tag::Image(_, _, _) => (), // shouldn't happen, handled in start
