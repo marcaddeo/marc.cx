@@ -26,7 +26,7 @@ pub struct ArticleMetadata {
     #[serde(with = "ymd_hm_format")]
     pub published: DateTime<Utc>,
     pub excerpt: String,
-    pub tags: Vec<String>,
+    pub tags: Option<Vec<String>>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -60,9 +60,13 @@ impl ArticleCollectionBuilder {
         let mut collection = self.internal_build()?;
 
         if let Some(Some(tag)) = &self.tag {
-            collection
-                .articles
-                .retain(|article| article.metadata.tags.contains(tag));
+            collection.articles.retain(|article| {
+                if article.metadata.tags.is_some() {
+                    article.metadata.tags.as_ref().unwrap().contains(tag)
+                } else {
+                    false
+                }
+            })
         }
 
         if let Some(Some(limit)) = self.limit {
@@ -216,7 +220,30 @@ pub fn get_article_by_slug(slug: String) -> Option<Article> {
 
 fn parse_article(path: PathBuf) -> Article {
     let markdown = read_to_string(path).unwrap();
-    let document = YamlFrontMatter::parse::<ArticleMetadata>(&markdown).unwrap();
+    let mut document = YamlFrontMatter::parse::<ArticleMetadata>(&markdown).unwrap();
+
+    let mut lines: Vec<&str> = document.content.lines().collect();
+    if let Some(last_line) = lines.pop() {
+        if last_line.starts_with("#blog/") {
+            let mut last_line = last_line.to_string();
+            last_line.retain(|c| c != '#');
+
+            let mut tags: Vec<String> = last_line.split("/").map(|s| s.to_string()).collect();
+            // Remove the blog tag, this is just for organization in Bear.
+            tags.remove(0);
+
+            if let Some(ref mut existing_tags) = document.metadata.tags {
+                existing_tags.append(&mut tags);
+                existing_tags.sort_unstable();
+                existing_tags.dedup();
+            } else {
+                document.metadata.tags = Some(tags);
+            }
+        } else {
+            lines.push(last_line);
+        }
+        document.content = lines.join("\n");
+    }
 
     let mut options = Options::empty();
     options.insert(Options::ENABLE_STRIKETHROUGH);
