@@ -9,6 +9,7 @@ use rocket::response::content;
 
 mod api;
 mod article;
+mod markdown;
 mod page;
 mod project;
 mod ssr;

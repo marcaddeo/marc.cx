@@ -1,6 +1,7 @@
+use super::markdown;
 use super::ymd_hm_format;
 use chrono::{DateTime, Utc};
-use pulldown_cmark::{html, CodeBlockKind, Event, Options, Parser, Tag};
+use pulldown_cmark::{CodeBlockKind, Event, Options, Parser, Tag};
 use rocket::fs::relative;
 use rocket::serde::json::Json;
 use serde::ser::{SerializeStruct, SerializeStructVariant};
@@ -428,7 +429,7 @@ fn parse_article(path: PathBuf) -> Article {
     });
 
     let mut html = String::new();
-    html::push_html(&mut html, parser);
+    markdown::push_html(&mut html, parser);
 
     Article {
         metadata: document.metadata,
