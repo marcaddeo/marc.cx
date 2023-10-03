@@ -3,17 +3,9 @@ title: Spicy Mala Noodles
 slug: spicy-mala-noodles
 status: published
 published: 2023-10-01 00:00
-excerpt: A quick and delicious mouth-numbing noodle dish
-bear: true
-tags:
-  - recipe
-  - chinese food
-  - noodles
-  - spicy
-  - mala
+excerpt: A delicious mouth-numbing noodle dish
 ---
 # Spicy Mala Noodles
-
 ![](spicy-mala-noodles/IMG_6161.jpeg)
 
 ## Ingredients
@@ -47,3 +39,5 @@ tags:
 5. Reduce heat to low, and add sauce to the pan. Add some water from the noodle pot as necessary to loosen the sauce.
 6. Use a spider to transfer noodles and shiitake mushrooms from the pot into the pan. Add scallion greens and sesame seeds. Toss to combine. Let sauce slightly reduce, tossing frequently.
 7. Bring pan to high heat and add a splash of shaoxing wine to side of pan. Toss, and allow the shaoxing wine to cook off slightly.
+
+#blog/recipe/chinese food#
