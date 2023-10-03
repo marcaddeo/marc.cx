@@ -24,6 +24,9 @@ struct HtmlWriter<'a, I, W> {
     /// Whether or not the last write wrote a newline.
     end_newline: bool,
 
+    buffers: HashMap<String, String>,
+    current_buffer: Option<String>,
+
     table_state: TableState,
     table_alignments: Vec<Alignment>,
     table_cell_index: usize,
@@ -40,6 +43,8 @@ where
             iter,
             writer,
             end_newline: true,
+            buffers: HashMap::new(),
+            current_buffer: None,
             table_state: TableState::Head,
             table_alignments: vec![],
             table_cell_index: 0,
@@ -56,12 +61,28 @@ where
     /// Writes a buffer, and tracks whether or not a newline was written.
     #[inline]
     fn write(&mut self, s: &str) -> io::Result<()> {
-        self.writer.write_str(s)?;
+        if let Some(tag) = &self.current_buffer {
+            if self.buffers.get(tag).is_none() {
+                self.buffers.insert(tag.into(), s.into());
+            } else {
+                let current = self.buffers.get_mut(tag).unwrap();
+                current.push_str(s);
+            }
+        } else {
+            self.writer.write_str(s)?;
+        }
 
         if !s.is_empty() {
             self.end_newline = s.ends_with('\n');
         }
         Ok(())
+    }
+
+    fn write_escape(&mut self, s: &str) -> io::Result<()> {
+        let mut escaped: String = String::new();
+        escape_html(&mut escaped, &s)?;
+
+        self.write(&escaped)
     }
 
     fn run(mut self) -> io::Result<()> {
@@ -74,12 +95,12 @@ where
                     self.end_tag(tag)?;
                 }
                 Text(text) => {
-                    escape_html(&mut self.writer, &text)?;
+                    self.write_escape(&text)?;
                     self.end_newline = text.ends_with('\n');
                 }
                 Code(text) => {
                     self.write("<code>")?;
-                    escape_html(&mut self.writer, &text)?;
+                    self.write_escape(&text)?;
                     self.write("</code>")?;
                 }
                 Html(html) => {
@@ -101,7 +122,7 @@ where
                 FootnoteReference(name) => {
                     let len = self.numbers.len() + 1;
                     self.write("<sup class=\"footnote-reference\"><a href=\"#")?;
-                    escape_html(&mut self.writer, &name)?;
+                    self.write_escape(&name)?;
                     self.write("\">")?;
                     let number = *self.numbers.entry(name).or_insert(len);
                     write!(&mut self.writer, "{}", number)?;
@@ -138,16 +159,16 @@ where
                 write!(&mut self.writer, "{}", level)?;
                 if let Some(id) = id {
                     self.write(" id=\"")?;
-                    escape_html(&mut self.writer, id)?;
+                    self.write_escape(id)?;
                     self.write("\"")?;
                 }
                 let mut classes = classes.iter();
                 if let Some(class) = classes.next() {
                     self.write(" class=\"")?;
-                    escape_html(&mut self.writer, class)?;
+                    self.write_escape(class)?;
                     for class in classes {
                         self.write(" ")?;
-                        escape_html(&mut self.writer, class)?;
+                        self.write_escape(class)?;
                     }
                     self.write("\"")?;
                 }
@@ -189,23 +210,35 @@ where
                     self.write("\n<blockquote>\n")
                 }
             }
-            Tag::CodeBlock(info) => {
+            Tag::CodeBlock(_) => {
                 if !self.end_newline {
                     self.write_newline()?;
                 }
-                match info {
-                    CodeBlockKind::Fenced(info) => {
-                        let lang = info.split(' ').next().unwrap();
-                        if lang.is_empty() {
-                            self.write("<pre><code>")
-                        } else {
-                            self.write("<pre><code class=\"language-")?;
-                            escape_html(&mut self.writer, lang)?;
-                            self.write("\">")
-                        }
-                    }
-                    CodeBlockKind::Indented => self.write("<pre><code>"),
-                }
+
+                self.current_buffer = Some("codeblock".into());
+                *self
+                    .buffers
+                    .entry("codeblock".into())
+                    .or_insert(String::new()) = String::new();
+
+                Ok(())
+
+                // match info {
+                //     CodeBlockKind::Fenced(info) => {
+                //         let lang = info.split(' ').next().unwrap();
+
+                //         if lang.is_empty() {
+                //             self.write("<pre><code>")
+                //         } else {
+                //             self.write("<pre><code class=\"language-")?;
+                //             self.write_escape(lang)?;
+                //             self.write("\">")
+                //         }
+                //     }
+                //     CodeBlockKind::Indented => {
+                //         self.write("<pre><code>")
+                //     }
+                // }
             }
             Tag::List(Some(1)) => {
                 if self.end_newline {
@@ -245,7 +278,7 @@ where
                 escape_href(&mut self.writer, &dest)?;
                 if !title.is_empty() {
                     self.write("\" title=\"")?;
-                    escape_html(&mut self.writer, &title)?;
+                    self.write_escape(&title)?;
                 }
                 self.write("\">")
             }
@@ -254,7 +287,7 @@ where
                 escape_href(&mut self.writer, &dest)?;
                 if !title.is_empty() {
                     self.write("\" title=\"")?;
-                    escape_html(&mut self.writer, &title)?;
+                    self.write_escape(&title)?;
                 }
                 self.write("\">")
             }
@@ -265,7 +298,7 @@ where
                 self.raw_text()?;
                 if !title.is_empty() {
                     self.write("\" title=\"")?;
-                    escape_html(&mut self.writer, &title)?;
+                    self.write_escape(&title)?;
                 }
                 self.write("\" />")
             }
@@ -275,7 +308,7 @@ where
                 } else {
                     self.write("\n<div class=\"footnote-definition\" id=\"")?;
                 }
-                escape_html(&mut self.writer, &*name)?;
+                self.write_escape(&*name)?;
                 self.write("\"><sup class=\"footnote-definition-label\">")?;
                 let len = self.numbers.len() + 1;
                 let number = *self.numbers.entry(name).or_insert(len);
@@ -319,8 +352,29 @@ where
             Tag::BlockQuote => {
                 self.write("</blockquote>\n")?;
             }
-            Tag::CodeBlock(_) => {
-                self.write("</code></pre>\n")?;
+            Tag::CodeBlock(info) => {
+                let mut language = "plaintext";
+                match info {
+                    CodeBlockKind::Fenced(ref info) => {
+                        let lang = info.split(' ').next().unwrap();
+                        language = lang;
+                    }
+                    _ => (),
+                };
+
+                self.current_buffer = None;
+                let code = self.buffers.get_mut("codeblock").unwrap().clone();
+
+                self.write("<noscript><pre><code class=\"language-")?;
+                self.write_escape(language)?;
+                self.write("\">")?;
+                self.write(&code)?;
+                self.write("</code></pre></noscript>")?;
+                self.write("<code-block language=\"")?;
+                self.write_escape(language)?;
+                self.write("\" code=\"")?;
+                self.write(&code)?;
+                self.write("\"></code-block>")?;
             }
             Tag::List(Some(_)) => {
                 self.write("</ol>\n")?;
@@ -364,7 +418,7 @@ where
                     nest -= 1;
                 }
                 Html(text) | Code(text) | Text(text) => {
-                    escape_html(&mut self.writer, &text)?;
+                    self.write_escape(&text)?;
                     self.end_newline = text.ends_with('\n');
                 }
                 SoftBreak | HardBreak | Rule => {

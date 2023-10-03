@@ -251,43 +251,43 @@ fn parse_article(path: PathBuf) -> Article {
         let event = Some(event);
 
         // Turn code blocks into <code-block> web components with <noscript> support.
-        markdown_feature! {
-            event,
+        // markdown_feature! {
+        //     event,
 
-            Event::Start(Tag::CodeBlock(info)) => {
-                in_code_block = true;
-                code = String::new();
+        //     Event::Start(Tag::CodeBlock(info)) => {
+        //         in_code_block = true;
+        //         code = String::new();
 
-                syntax = match info {
-                    CodeBlockKind::Fenced(ref language) => language.to_string(),
-                    _ => String::from("plaintext"),
-                };
+        //         syntax = match info {
+        //             CodeBlockKind::Fenced(ref language) => language.to_string(),
+        //             _ => String::from("plaintext"),
+        //         };
 
-                None
-            }
-            Event::Text(text) => {
-                if in_code_block {
-                    code += &text;
+        //         None
+        //     }
+        //     Event::Text(text) => {
+        //         if in_code_block {
+        //             code += &text;
 
-                    None
-                } else {
-                    Some(Event::Text(text))
-                }
-            }
-            Event::End(Tag::CodeBlock(_)) => {
-                in_code_block = false;
+        //             None
+        //         } else {
+        //             Some(Event::Text(text))
+        //         }
+        //     }
+        //     Event::End(Tag::CodeBlock(_)) => {
+        //         in_code_block = false;
 
-                code = html_escape::encode_safe(&code).into();
-                let html = format!(
-                    r##"
-                    <noscript><pre><code>{}</code></pre></noscript>
-                    <code-block language="{}" code="{}"></code-block>
-                    "##,
-                    code, syntax, code
-                );
-                Some(Event::Html(html.into()))
-            }
-        }
+        //         code = html_escape::encode_safe(&code).into();
+        //         let html = format!(
+        //             r##"
+        //             <noscript><pre><code>{}</code></pre></noscript>
+        //             <code-block language="{}" code="{}"></code-block>
+        //             "##,
+        //             code, syntax, code
+        //         );
+        //         Some(Event::Html(html.into()))
+        //     }
+        // }
 
         // Handle external links.
         markdown_feature! {
