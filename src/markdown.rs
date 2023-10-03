@@ -204,11 +204,19 @@ where
                 }
             }
             Tag::BlockQuote => {
-                if self.end_newline {
-                    self.write("<blockquote>\n")
-                } else {
-                    self.write("\n<blockquote>\n")
-                }
+                // if self.end_newline {
+                //     self.write("<blockquote>\n")
+                // } else {
+                //     self.write("\n<blockquote>\n")
+                // }
+
+                self.current_buffer = Some("blockquote".into());
+                *self
+                    .buffers
+                    .entry("blockquote".into())
+                    .or_insert(String::new()) = String::new();
+
+                Ok(())
             }
             Tag::CodeBlock(_) => {
                 if !self.end_newline {
@@ -350,7 +358,63 @@ where
                 self.table_cell_index += 1;
             }
             Tag::BlockQuote => {
-                self.write("</blockquote>\n")?;
+                let blockquote = self.buffers.get_mut("blockquote").unwrap().clone();
+                let mut lines = blockquote.lines();
+                let first_line = lines.next();
+
+                let mut alert_type = String::new();
+                let mut quote = String::new();
+
+                if let Some(mut line) = first_line {
+                    if line.starts_with("<p>") {
+                        line = line.strip_prefix("<p>").unwrap();
+                        quote += "<p>";
+                    }
+                    match line {
+                        "[!NOTE]" => {
+                            alert_type = "note".into();
+                        }
+                        "[!IMPORTANT]" => {
+                            alert_type = "important".into();
+                        }
+                        "[!WARNING]" => {
+                            alert_type = "warning".into();
+                        }
+                        _ => (),
+                    }
+
+                    // If this isn't an alert, we need to preserve the first
+                    // line.
+                    if alert_type.is_empty() {
+                        quote += line;
+                    }
+                }
+
+                // Join the remaining lines back together.
+                quote += &lines.collect::<Vec<_>>().join("\n");
+
+                self.current_buffer = None;
+
+                if self.end_newline {
+                    self.write("<noscript><blockquote class=\"alert--")?;
+                } else {
+                    self.write("\n<noscript><blockquote class=\"alert--")?;
+                }
+                self.write_escape(&alert_type)?;
+                self.write("\">\n")?;
+                self.write(&quote)?;
+                self.write("</blockquote></noscript>\n")?;
+
+                if self.end_newline {
+                    self.write("<alert-block type=\"")?;
+                } else {
+                    self.write("\n<alert-block type=\"")?;
+                }
+                self.write_escape(&alert_type)?;
+                self.write("\" value=\"")?;
+                self.write_escape(&quote)?;
+                self.write("\">\n")?;
+                self.write("</alert-block>")?;
             }
             Tag::CodeBlock(info) => {
                 let mut language = "plaintext";

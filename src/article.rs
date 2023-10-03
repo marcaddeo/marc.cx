@@ -337,93 +337,93 @@ fn parse_article(path: PathBuf) -> Article {
         }
 
         // GitHub-style blockquote alerts.
-        markdown_feature! {
-            event,
+        // markdown_feature! {
+        //     event,
 
-            Event::Start(Tag::BlockQuote) => {
-                in_blockquote = true;
-                blockquote_text = String::new();
+        //     Event::Start(Tag::BlockQuote) => {
+        //         in_blockquote = true;
+        //         blockquote_text = String::new();
 
-                None
-            }
-            Event::SoftBreak => {
-                blockquote_text += "\n";
+        //         None
+        //     }
+        //     Event::SoftBreak => {
+        //         blockquote_text += "\n";
 
-                None
-            }
-            Event::Start(Tag::Paragraph) => {
-                blockquote_text += "<p>";
+        //         None
+        //     }
+        //     Event::Start(Tag::Paragraph) => {
+        //         blockquote_text += "<p>";
 
-                None
-            }
-            Event::End(Tag::Paragraph) => {
-                blockquote_text += "</p>";
+        //         None
+        //     }
+        //     Event::End(Tag::Paragraph) => {
+        //         blockquote_text += "</p>";
 
-                None
-            }
-            Event::Text(text) => {
-                if in_blockquote {
-                    blockquote_text += &text;
+        //         None
+        //     }
+        //     Event::Text(text) => {
+        //         if in_blockquote {
+        //             blockquote_text += &text;
 
-                    None
-                } else {
-                    Some(Event::Text(text))
-                }
-            }
-            Event::End(Tag::BlockQuote) => {
-                in_blockquote = false;
+        //             None
+        //         } else {
+        //             Some(Event::Text(text))
+        //         }
+        //     }
+        //     Event::End(Tag::BlockQuote) => {
+        //         in_blockquote = false;
 
-                let mut lines = blockquote_text.lines();
-                let first_line = lines.next();
+        //         let mut lines = blockquote_text.lines();
+        //         let first_line = lines.next();
 
-                let mut alert_type = String::new();
-                let mut quote = String::new();
+        //         let mut alert_type = String::new();
+        //         let mut quote = String::new();
 
-                if let Some(mut line) = first_line {
-                    if line.starts_with("<p>") {
-                        line = line.strip_prefix("<p>").unwrap();
-                        quote += "<p>";
-                    }
-                    match line {
-                        "[!NOTE]" => {
-                            alert_type = "note".into();
-                        }
-                        "[!IMPORTANT]" => {
-                            alert_type = "important".into();
-                        }
-                        "[!WARNING]" => {
-                            alert_type = "warning".into();
-                        }
-                        _ => (),
-                    }
+        //         if let Some(mut line) = first_line {
+        //             if line.starts_with("<p>") {
+        //                 line = line.strip_prefix("<p>").unwrap();
+        //                 quote += "<p>";
+        //             }
+        //             match line {
+        //                 "[!NOTE]" => {
+        //                     alert_type = "note".into();
+        //                 }
+        //                 "[!IMPORTANT]" => {
+        //                     alert_type = "important".into();
+        //                 }
+        //                 "[!WARNING]" => {
+        //                     alert_type = "warning".into();
+        //                 }
+        //                 _ => (),
+        //             }
 
-                    // If this isn't an alert, we need to preserve the first
-                    // line.
-                    if alert_type.is_empty() {
-                        quote += line;
-                    }
-                }
+        //             // If this isn't an alert, we need to preserve the first
+        //             // line.
+        //             if alert_type.is_empty() {
+        //                 quote += line;
+        //             }
+        //         }
 
-                // Join the remaining lines back together.
-                quote += &lines.collect::<Vec<_>>().join("\n");
+        //         // Join the remaining lines back together.
+        //         quote += &lines.collect::<Vec<_>>().join("\n");
 
-                let mut html = format!("<blockquote>{}</blockquote>", quote);
-                if !alert_type.is_empty() {
-                    html = format!(
-                        r##"
-                        <noscript><blockquote class="alert--{}">{}</blockquote></noscript>
-                        <alert-block type="{}" value="{}"></alert-block>
-                        "##,
-                        alert_type,
-                        quote,
-                        alert_type,
-                        quote,
-                    );
-                }
+        //         let mut html = format!("<blockquote>{}</blockquote>", quote);
+        //         if !alert_type.is_empty() {
+        //             html = format!(
+        //                 r##"
+        //                 <noscript><blockquote class="alert--{}">{}</blockquote></noscript>
+        //                 <alert-block type="{}" value="{}"></alert-block>
+        //                 "##,
+        //                 alert_type,
+        //                 quote,
+        //                 alert_type,
+        //                 quote,
+        //             );
+        //         }
 
-                Some(Event::Html(html.into()))
-            }
-        }
+        //         Some(Event::Html(html.into()))
+        //     }
+        // }
 
         event
     });
