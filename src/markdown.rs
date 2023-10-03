@@ -126,7 +126,7 @@ where
                     self.write_escape(&name)?;
                     self.write("\">")?;
                     let number = *self.numbers.entry(name).or_insert(len);
-                    write!(&mut self.writer, "{}", number)?;
+                    self.write(&format!("{}", number))?;
                     self.write("</a></sup>")?;
                 }
                 TaskListMarker(true) => {
@@ -157,7 +157,7 @@ where
                 } else {
                     self.write("\n<")?;
                 }
-                write!(&mut self.writer, "{}", level)?;
+                self.write(&format!("{}", level))?;
                 if let Some(id) = id {
                     self.write(" id=\"")?;
                     self.write_escape(id)?;
@@ -253,7 +253,7 @@ where
                 } else {
                     self.write("\n<ol start=\"")?;
                 }
-                write!(&mut self.writer, "{}", start)?;
+                self.write(&format!("{}", start))?;
                 self.write("\">\n")
             }
             Tag::List(None) => {
@@ -315,7 +315,7 @@ where
                 self.write("\"><sup class=\"footnote-definition-label\">")?;
                 let len = self.numbers.len() + 1;
                 let number = *self.numbers.entry(name).or_insert(len);
-                write!(&mut self.writer, "{}", number)?;
+                self.write(&format!("{}", number))?;
                 self.write("</sup>")
             }
         }
@@ -328,7 +328,7 @@ where
             }
             Tag::Heading(level, _id, _classes) => {
                 self.write("</")?;
-                write!(&mut self.writer, "{}", level)?;
+                self.write(&format!("{}", level))?;
                 self.write(">\n")?;
             }
             Tag::Table(_) => {
@@ -497,7 +497,7 @@ where
                 FootnoteReference(name) => {
                     let len = self.numbers.len() + 1;
                     let number = *self.numbers.entry(name).or_insert(len);
-                    write!(&mut self.writer, "[{}]", number)?;
+                    self.write(&format!("{}", number))?;
                 }
                 TaskListMarker(true) => self.write("[x]")?,
                 TaskListMarker(false) => self.write("[ ]")?,
