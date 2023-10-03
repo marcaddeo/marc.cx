@@ -290,51 +290,51 @@ fn parse_article(path: PathBuf) -> Article {
         // }
 
         // Handle external links.
-        markdown_feature! {
-            event,
+        // markdown_feature! {
+        //     event,
 
-            Event::Start(Tag::Link(_, _, _)) => {
-                in_link = true;
-                link_text = String::new();
+        //     Event::Start(Tag::Link(_, _, _)) => {
+        //         in_link = true;
+        //         link_text = String::new();
 
-                None
-            }
-            Event::Text(text) => {
-                if in_link {
-                    link_text += &text;
+        //         None
+        //     }
+        //     Event::Text(text) => {
+        //         if in_link {
+        //             link_text += &text;
 
-                    None
-                } else {
-                    Some(Event::Text(text))
-                }
-            }
-            Event::End(Tag::Link(_, destination, link_title)) => {
-                in_link = false;
+        //             None
+        //         } else {
+        //             Some(Event::Text(text))
+        //         }
+        //     }
+        //     Event::End(Tag::Link(_, destination, link_title)) => {
+        //         in_link = false;
 
-                let is_external = !(destination.starts_with("/")
-                    || destination.starts_with("https://marc.cx"));
+        //         let is_external = !(destination.starts_with("/")
+        //             || destination.starts_with("https://marc.cx"));
 
-                let mut title = String::new();
-                if !link_title.is_empty() {
-                    title = format!(" title=\"{}\" ", link_title);
-                }
-                let mut external_attributes = "";
-                if is_external {
-                    external_attributes = r##"target="_blank" rel="noopener" class="external""##
-                }
-                let html = format!(
-                    r##"
-                    <a href="{}"{}{}>{}</a>
-                    "##,
-                    destination,
-                    title,
-                    external_attributes,
-                    link_text.trim()
-                );
+        //         let mut title = String::new();
+        //         if !link_title.is_empty() {
+        //             title = format!(" title=\"{}\" ", link_title);
+        //         }
+        //         let mut external_attributes = "";
+        //         if is_external {
+        //             external_attributes = r##"target="_blank" rel="noopener" class="external""##
+        //         }
+        //         let html = format!(
+        //             r##"
+        //             <a href="{}"{}{}>{}</a>
+        //             "##,
+        //             destination,
+        //             title,
+        //             external_attributes,
+        //             link_text.trim()
+        //         );
 
-                Some(Event::Html(html.into()))
-            }
-        }
+        //         Some(Event::Html(html.into()))
+        //     }
+        // }
 
         // GitHub-style blockquote alerts.
         // markdown_feature! {

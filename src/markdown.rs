@@ -297,14 +297,18 @@ where
                 }
                 self.write("\">")
             }
-            Tag::Link(_link_type, dest, title) => {
-                self.write("<a href=\"")?;
-                self.write_escape_href(&dest)?;
-                if !title.is_empty() {
-                    self.write("\" title=\"")?;
-                    self.write_escape(&title)?;
-                }
-                self.write("\">")
+            Tag::Link(_link_type, _dest, _title) => {
+                self.current_buffer = Some("link".into());
+                *self.buffers.entry("link".into()).or_insert(String::new()) = String::new();
+
+                Ok(())
+                // self.write("<a href=\"")?;
+                // self.write_escape_href(&dest)?;
+                // if !title.is_empty() {
+                //     self.write("\" title=\"")?;
+                //     self.write_escape(&title)?;
+                // }
+                // self.write("\">")
             }
             Tag::Image(_link_type, dest, title) => {
                 self.write("<img src=\"")?;
@@ -465,7 +469,22 @@ where
             Tag::Strikethrough => {
                 self.write("</del>")?;
             }
-            Tag::Link(_, _, _) => {
+            Tag::Link(_, dest, title) => {
+                self.current_buffer = None;
+                let inner = self.buffers.get_mut("link").unwrap().clone();
+                let is_external = !(dest.starts_with("/") || dest.starts_with("https://marc.cx"));
+
+                self.write("<a href=\"")?;
+                self.write_escape_href(&dest)?;
+                if !title.is_empty() {
+                    self.write("\" title=\"")?;
+                    self.write_escape(&title)?;
+                }
+                if is_external {
+                    self.write("\" target=\"_blank\" rel=\"noopener\" class=\"external")?;
+                }
+                self.write("\">")?;
+                self.write(&inner)?;
                 self.write("</a>")?;
             }
             Tag::Image(_, _, _) => (), // shouldn't happen, handled in start
