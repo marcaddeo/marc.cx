@@ -85,6 +85,13 @@ where
         self.write(&escaped)
     }
 
+    fn write_escape_href(&mut self, s: &str) -> io::Result<()> {
+        let mut escaped: String = String::new();
+        escape_href(&mut escaped, &s)?;
+
+        self.write(&escaped)
+    }
+
     fn run(mut self) -> io::Result<()> {
         while let Some(event) = self.iter.next() {
             match event {
@@ -283,7 +290,7 @@ where
             Tag::Strikethrough => self.write("<del>"),
             Tag::Link(LinkType::Email, dest, title) => {
                 self.write("<a href=\"mailto:")?;
-                escape_href(&mut self.writer, &dest)?;
+                self.write_escape_href(&dest)?;
                 if !title.is_empty() {
                     self.write("\" title=\"")?;
                     self.write_escape(&title)?;
@@ -292,7 +299,7 @@ where
             }
             Tag::Link(_link_type, dest, title) => {
                 self.write("<a href=\"")?;
-                escape_href(&mut self.writer, &dest)?;
+                self.write_escape_href(&dest)?;
                 if !title.is_empty() {
                     self.write("\" title=\"")?;
                     self.write_escape(&title)?;
@@ -301,7 +308,7 @@ where
             }
             Tag::Image(_link_type, dest, title) => {
                 self.write("<img src=\"")?;
-                escape_href(&mut self.writer, &dest)?;
+                self.write_escape_href(&dest)?;
                 self.write("\" alt=\"")?;
                 self.raw_text()?;
                 if !title.is_empty() {
