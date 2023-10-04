@@ -14,7 +14,7 @@ RUN yarn build
 FROM minidocks/imagemagick:latest as content-builder
 WORKDIR /app
 COPY content /app/content
-RUN find content -type file -name "*jpeg" -o -name "*.jpg" -o -name "*.png" \
+RUN find content -type f -name "*jpeg" -o -name "*.jpg" -o -name "*.png" \
     | xargs -I{} sh -c 'convert -resize 730x {} - | sponge {}'
 
 FROM debian:bookworm-slim
