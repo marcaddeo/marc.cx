@@ -14,7 +14,7 @@ RUN yarn build
 FROM minidocks/imagemagick:latest as content-builder
 WORKDIR /app
 COPY content /app/content
-RUN apt-get update -y
+RUN apt-get update
 RUN apt-get install -y moreutils
 RUN find content -type f -name "*jpeg" -o -name "*.jpg" -o -name "*.png" \
     | xargs -I{} sh -c 'convert -resize 730x {} - | sponge {}'
