@@ -11,7 +11,7 @@ COPY . .
 RUN yarn install
 RUN yarn build
 
-FROM minidocks/imagemagick:latest as content-builder
+FROM dpokidov/imagemagick:latest as content-builder
 WORKDIR /app
 COPY content /app/content
 RUN apt-get update
