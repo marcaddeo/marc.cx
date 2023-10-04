@@ -11,7 +11,7 @@ tags:
 ---
 
 > [!WARNING]
-> This article is out of date and should not longer be used.
+> This article is out of date and should no longer be used.
 
 # Auto Renewing SSL Certs on NGINX with Let's Encrypt
 
