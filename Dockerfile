@@ -11,7 +11,7 @@ COPY . .
 RUN yarn install
 RUN yarn build
 
-FROM debian:buster-slim
+FROM debian:bullseye-slim
 
 WORKDIR /app
 
