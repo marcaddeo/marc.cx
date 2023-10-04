@@ -22,7 +22,7 @@
         I'm the Director of Technology a
         <a href="https://mythicdigital.io">Mythic Digital</a>. In my free time
         I enjoy PC gaming, tinkering with and automating my Homelab with
-        Ansible, coding with Rust, and Cooking.
+        Ansible, coding with Rust, and cooking.
       </p>
     </div>
   </section>
