@@ -23,7 +23,7 @@ WORKDIR /app
 
 COPY --from=rust-builder /usr/local/cargo/bin/marccx /app
 COPY --from=node-builder /app/static /app/static
-COPY --from=content-builder content /app/content
+COPY --from=content-builder /app/content /app/content
 
 ENV ROCKET_ADDRESS=0.0.0.0
 EXPOSE 8000
