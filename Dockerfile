@@ -22,4 +22,4 @@ COPY content /app
 ENV ROCKET_ADDRESS=0.0.0.0
 EXPOSE 8000
 
-CMD ["marccx"]
+CMD ["./marccx"]
