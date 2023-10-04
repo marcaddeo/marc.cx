@@ -21,8 +21,8 @@
       <p>
         I'm the Director of Technology at <a
           href="https://mythicdigital.io">Mythic Digital</a>. In my free time I
-        enjoy PC gaming, tinkering with and automating my Homelab with Ansible,
-        coding with Rust, and cooking.
+        enjoy PC gaming, tinkering with and automating my Homelab using
+        Ansible, coding in Rust, and cooking.
       </p>
     </div>
   </section>
