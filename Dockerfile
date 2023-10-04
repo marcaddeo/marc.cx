@@ -11,7 +11,7 @@ COPY . .
 RUN yarn install
 RUN yarn build
 
-FROM debian:bullseye-slim
+FROM debian:bookworm-slim
 
 WORKDIR /app
 
