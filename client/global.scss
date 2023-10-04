@@ -1,0 +1,66 @@
+@import url("https://fonts.googleapis.com/css2?family=Fira+Code&family=Fira+Sans&family=Roboto&display=swap");
+
+$color-brand: #857ef1;
+$color-link: $color-brand;
+$color-selection: lighten($color-brand, 12);
+$color-heading-dark: #1a1a1a;
+$color-text: #363636;
+$color-subtext: #c7c7c7;
+$color-noscript-code-bg: #f7f7f7;
+$color-noscript-code-text: #444444;
+$font-fira-code: "Fira Code", monospace;
+$font-fira-sans: "Fira Sans", sans-serif;
+$font-roboto: "Roboto", sans-serif;
+
+:global {
+  ::selection {
+    background-color: $color-selection;
+  }
+
+  a {
+    color: $color-link;
+    text-decoration: none;
+
+    &:hover,
+    &:active,
+    &:focus {
+      color: $color-link;
+    }
+
+    &:focus {
+      outline: none;
+    }
+
+    &:hover {
+      color: darken($color-link, 22);
+    }
+  }
+
+  body {
+    display: grid;
+    grid-gap: 10px;
+    grid-template-columns: 730px;
+    grid-template-rows: 0.01fr 2fr 0.1fr;
+    grid-template-areas:
+      "header"
+      "main"
+      "footer";
+    justify-content: center;
+
+    font-family: $font-fira-sans;
+    font-size: 16px;
+
+    color: $color-text;
+  }
+
+  code {
+    background-color: $color-subtext;
+    padding: 0.3rem 0.4rem;
+  }
+
+  @media screen and (max-width: 730px) {
+    body {
+      grid-template-columns: 90%;
+    }
+  }
+}

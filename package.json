@@ -1,13 +1,41 @@
 {
-  "repository": {
+  "name": "marc.cx-frontened",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "rollup -c",
+    "dev": "rollup -c -w",
+    "start": "sirv static --no-clear",
+    "check": "svelte-check --tsconfig ./tsconfig.json",
+    "fix": "prettier --write ./client"
+  },
+  "devDependencies": {
+    "@codewithshin/svelte-utterances": "^0.2.2",
+    "@rollup/plugin-commonjs": "^17.0.0",
+    "@rollup/plugin-node-resolve": "^11.0.0",
+    "@rollup/plugin-typescript": "^8.0.0",
+    "@tsconfig/svelte": "^2.0.0",
+    "prettier": "2.7.1",
+    "prettier-plugin-svelte": "2.8.0",
+    "rollup": "^2.3.4",
+    "rollup-plugin-css-only": "^3.1.0",
+    "rollup-plugin-livereload": "^2.0.0",
+    "rollup-plugin-svelte": "^7.0.0",
+    "rollup-plugin-terser": "^7.0.0",
+    "svelte": "^3.0.0",
+    "svelte-check": "^2.0.0",
+    "svelte-highlight": "^6.2.1",
+    "svelte-preprocess": "^4.0.0",
+    "tslib": "^2.0.0",
+    "typescript": "^4.0.0"
   },
   "dependencies": {
-    "brunch": "^1.8.1",
-    "babel-brunch": "^5.1.1",
-    "clean-css-brunch": ">= 1.0 < 1.8",
-    "css-brunch": ">= 1.0 < 1.8",
-    "javascript-brunch": ">= 1.0 < 1.8",
-    "sass-brunch": "^1.8.10",
-    "uglify-js-brunch": ">= 1.0 < 1.8"
+    "node-html-parser": "^6.1.1",
+    "postcss": "^8.4.17",
+    "rollup-plugin-external-globals": "^0.6.1",
+    "rollup-plugin-html": "^0.2.1",
+    "sass": "^1.55.0",
+    "sirv-cli": "^2.0.0",
+    "svelte-routing": "^1.6.0"
   }
 }
