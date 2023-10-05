@@ -8,11 +8,10 @@ excerpt: How I'm using Let's Encrypt for free auto renewing SSL certificates on 
 tags:
   - linux
 ---
+# Auto Renewing SSL Certs on NGINX with Let's Encrypt
 
 > [!WARNING]
 > This article is out of date and should no longer be used.
-
-# Auto Renewing SSL Certs on NGINX with Let's Encrypt
 
 [Let's Encrypt][] has recently entered a public beta and I've been really excited to test it out. They're offering free SSL certs that expire every 90 days, and are extremely easy to get. Having used Comodo in the past to get certificates, I've been waiting for this day.
 
