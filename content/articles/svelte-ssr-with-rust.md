@@ -5,22 +5,16 @@ status: unpublished
 published: 2022-11-26 00:00
 excerpt: A how to guide on rendering Svelte JavaScript on the server-side using Rust and the Axum web framework
 tags:
-  - rust
   - axum
   - svelte
   - ssr
 ---
 # How to Use Rust and Axum to Render Svelte on the Server-Side
 
-In this how-to guide, we're going to explore using Rust and the Axum web
-framework to render Svelte on the server-side. First we'll set up a Rust REST
-API backend using Axum, and a Svelte frontend application to render data from
-the API. After, we'll Finally, we'll set up server-side rendering so our pages
-can be crawled by bots as well as load very fast.
+In this how-to guide, we're going to explore using Rust and the Axum web framework to render Svelte on the server-side. First we'll set up a Rust REST API backend using Axum, and a Svelte frontend application to render data from the API. After, we'll Finally, we'll set up server-side rendering so our pages can be crawled by bots as well as load very fast.
 
 ## Setting up our Rust REST API
-First we'll set up a Rust REST API using the Axum web framework. We'll create a
-project called My Dogs, and install some dependencies.
+First we'll set up a Rust REST API using the Axum web framework. We'll create a project called My Dogs, and install some dependencies.
 
 
 ```bash
@@ -31,8 +25,7 @@ cargo add serde --features serde_derive
 cargo add serde_json axum
 ```
 
-Next let's create a basic REST API that will return some dog information for
-our blog to render.
+Next let's create a basic REST API that will return some dog information for our blog to render.
 
 ```rust
 use axum::{
@@ -136,3 +129,5 @@ date: Sun, 27 Nov 2022 01:04:12 GMT
 ```
 
 Great! Now we need a frontend to display cute pictures of my dogs.
+
+#blog/unpublished/rust
