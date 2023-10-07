@@ -1,7 +1,7 @@
 use super::markdown;
 use super::ymd_hm_format;
 use chrono::{DateTime, Utc};
-use pulldown_cmark::{CodeBlockKind, Event, Options, Parser, Tag};
+use pulldown_cmark::{Options, Parser};
 use rocket::fs::relative;
 use rocket::serde::json::Json;
 use serde::ser::{SerializeStruct, SerializeStructVariant};
