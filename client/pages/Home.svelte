@@ -19,10 +19,11 @@
     </div>
     <div class="intro">
       <p>
-        I'm the Director of Technology at <a
-          href="https://mythicdigital.io">Mythic Digital</a>. In my free time I
-        enjoy PC gaming, tinkering with and automating my Homelab using
-        Ansible, coding in Rust, and cooking.
+        I'm a Lead Web Developer at the <a target="_blank"
+          href="https://it.brown.edu">Office of Information Technology at Brown
+          University</a>. In my free time I enjoy PC gaming, tinkering with and
+        automating my Homelab using Ansible, coding in Rust, fishing, and
+        cooking.
       </p>
     </div>
   </section>
