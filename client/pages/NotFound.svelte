@@ -3,6 +3,7 @@
 
 <svelte:head>
   <title>Not Found | marc.cx</title>
+  <meta name="description" content="Page not found">
 
   <script>
     window.not_found = true;

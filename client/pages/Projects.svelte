@@ -7,6 +7,7 @@
 
 <svelte:head>
   <title>Projects | marc.cx</title>
+  <meta name="description" content="Marc Addeo's Projects">
 </svelte:head>
 
 <div>

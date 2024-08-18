@@ -13,6 +13,7 @@
   {#if tag}
     <title>#{tag} Articles | marc.cx</title>
   {/if}
+  <meta name="description" content="Marc Addeo's Blog Articles">
 </svelte:head>
 
 {#if articles && articles.length}

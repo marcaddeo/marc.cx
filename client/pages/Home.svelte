@@ -7,6 +7,7 @@
 
 <svelte:head>
   <title>Home | marc.cx</title>
+  <meta name="description" content="Marc Addeo's Website">
 </svelte:head>
 
 <div class="container">
