@@ -1,7 +1,7 @@
 ---
 aliases: 
 title: "Truck Sim Shifter Knob Upgrades: Part 1: Custom Thread Adapter"
-slug: truck-sim-shifter-knob-upgrades-part-1-custom-thread-adapater
+slug: truck-sim-shifter-knob-upgrades-part-1-custom-thread-adapter
 status: published
 published: 2024-08-18 00:00
 excerpt: Removing the wobble from my truck sim shifter knob with a custom thread adapter
@@ -10,7 +10,7 @@ tags:
   - ats
   - american-truck-simulator
 created: 2024-08-18T09:53:44-04:00
-modified: 2024-08-18T10:40:06-04:00
+modified: 2024-08-18T11:18:25-04:00
 ---
 # Truck Sim Shifter Knob Upgrades: Part 1: Custom Thread Adapter
 
