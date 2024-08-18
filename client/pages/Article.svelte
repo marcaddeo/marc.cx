@@ -18,7 +18,7 @@
 
 <svelte:component this={component} {slug} bind:article />
 
-{#if typeof component === typeof ArticleInterface}
+{#if component !== null}
   <Utterances reponame="marcaddeo/marc.cx" />
 {/if}
 
