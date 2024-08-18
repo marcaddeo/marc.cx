@@ -18,7 +18,7 @@
 
 <svelte:component this={component} {slug} bind:article />
 
-{#if component !== null}
+{#if article && !article?.error}
   <Utterances reponame="marcaddeo/marc.cx" />
 {/if}
 
