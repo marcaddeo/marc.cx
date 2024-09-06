@@ -1,0 +1,87 @@
+==================================================================
+https://keybase.io/marcaddeo
+--------------------------------------------------------------------
+
+I hereby claim:
+
+  * I am an admin of https://marc.cx
+  * I am marcaddeo (https://keybase.io/marcaddeo) on keybase.
+  * I have a public key with fingerprint 64F0 1535 6FE3 7ABE 3444  5611 AB5F C39B 9610 5359
+
+To do so, I am signing this object:
+
+{
+  "body": {
+    "key": {
+      "eldest_kid": "01011d029116915c4e8f15f9230eac3bcfd2990c71f7cff4bcea1a8e522d6b208e4a0a",
+      "fingerprint": "64f015356fe37abe34445611ab5fc39b96105359",
+      "host": "keybase.io",
+      "key_id": "ab5fc39b96105359",
+      "kid": "01011d029116915c4e8f15f9230eac3bcfd2990c71f7cff4bcea1a8e522d6b208e4a0a",
+      "uid": "64011d54360d5bda16408a902b448d00",
+      "username": "marcaddeo"
+    },
+    "merkle_root": {
+      "ctime": 1725628918,
+      "hash_meta": "71bb382a76b73b29615b4ba513357acbb7f3d0636cff6c07afcfc213e235426c",
+      "seqno": 26079344
+    },
+    "revoke": {
+      "sig_ids": [
+        "bff37465a84b6ece5dfb6705798aad60fa01a1a73c68b239fd1c2a96a31916480f"
+      ]
+    },
+    "service": {
+      "hostname": "marc.cx",
+      "protocol": "https:"
+    },
+    "type": "web_service_binding",
+    "version": 1
+  },
+  "ctime": 1725628943,
+  "expire_in": 157680000,
+  "prev": "9799f6a0693ee1f090119daa8b877eb79e3cc5e0b8ab2496ae359f2262adddbd",
+  "seqno": 33,
+  "tag": "signature"
+}
+
+which yields the signature:
+
+-----BEGIN PGP MESSAGE-----
+Version: Keybase OpenPGP v2.1.13
+Comment: https://keybase.io/crypto
+
+yMPQAnicrVNrbBVFGL1tAcvl6Ss8g3Sp1pACszu7s7u1yEuKQmkTwAePcp2ZnWm3
+j3svu9vSplYeAqEgYCA0mpLQ8ChQEgSsCBhAuEUhJQSkBGqraOVhGkIxpEAKorON
+RmP86f7Z7LfnnO9855tp6JcQCMbtDcWqqwbOnhvXeMotDvCW+AHlEolYZVJauVTA
+ul+s0GKuFyqwLSlNAjKQZQsopiwjU9aoygwua9xUIGCYQkK5pZgmoLrMdcq5SijD
+MjaYpigWIgowmIoBllIlbodzmRN17LAnZJHKgaxBDXEGdUwYVFVVQ7KMicYpNImJ
+ZCB+m4KYF3F9hjBHsMvG2hFREx+hbnv/gf+ffRd3yyHVl9NUiIClEQvLomBgEyhE
+VQ0LAB/oMieMi5hAF2GHYstiEakiVSpiTkEhCzmRiOenSz3bx8i6oiHFMGVDTIjd
+vFAR87Cg6jIh0FCwjogOiSLm0ohKsCZDqOmYEqJzaAEEkTCNKNAxp5wqMmQK1FQF
+UWHEZYvCESlNQUA3Ra7CgsNKIgXM7+7auSI4V0qbLxHOoa4iDRsqQYwyzeIE6UDT
+TQNjCwGOgSwi0SFFBlGgyS2ZKthEGMqmGN8AXMqp8Ls5JTbtFvc39Y8ExtJS4Sbq
+RLwIjRSKYp7nRd00PxOvLOqjFjMS+pMfInbYEkdEMEqY49qRsMhIIP8VlwpTJVYa
+tR0Wsn2EpiMDiMfvw0qEpKmbJkcYIBMyJnNgir2ZFsYGMXSdEd1kkFKNAWJgoqhi
+GiZODVcUpIiFWcT6Oz8oWnk4V2iK0MLYK3aYVHHq5IIegbhgoFfPeP/uBIK9B/51
+o0ZtGfD71BKr4nZTUf33l9GX9z+vq960fuau5x4m5x8dtO2gd6x2Vu61qprChRvg
+e9+9U75twtXA1f2fnKv6IXPs0rMDe9YNfuajUEmLtK+po3PCyDmjvi598XjNnWxo
+dLR3jMtrnrW5vmLnxuSUxHFDEzuzhm2o7HtpRXZmzqZS7crVdjuu75Gc8cG1zV3O
+sN9S+rMDJxKbZh7/ZoqXWZDePG546cT8znPeyfrWuZ9u2XsFDagfeWHlj98eetZu
+SG5blj4542baI+errK45+zteGFLVuH1d11OrOs6s+eLRkf1l91oXjYhXR8ybOffo
+bBR0M3+Otlx0JpXzw7EbNw/20GvOLN8XS31azep/YxAadeNBZvQVurPtTq83zPPx
+H8YaE+tuL38wfsGxhwc279n+8pKPp2Usnb538LKdoQex0e6OYw2x9NrOhKTUxVPz
+Mj7I6Wj46XrKshlJ4P6O7LbKPq33tq7u/W7NwklZrbtrJ78+Iml02+7cX2svtNS/
+3dw3Oz+hqtyi8bMkY51z62J7XdfjcJ8nGavvvz/vWtMm2v7mk+rr5PKJt84/SThX
+YFc+ml3z0o7i8UeGThvz2YxaPnzS88cD05Pa5pVrh/agVfmnhw0e0lV9du3dJSu4
+0bh+rbo0mL/18cS7SbcW9EmYf+lyc6yy367Fr6XUeTcz56Dh/JesYHLDxrKM0yBr
+ZVk6kMiY069OnBI8jP8AbIT+RA==
+=2UX1
+-----END PGP MESSAGE-----
+
+And finally, I am proving ownership of this host by posting or
+appending to this document.
+
+View my publicly-auditable identity here: https://keybase.io/marcaddeo
+
+==================================================================
