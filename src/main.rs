@@ -52,4 +52,9 @@ fn rocket() -> _ {
         )
         // Static files.
         .mount("/static", FileServer::from(relative!("static")).rank(-2))
+        // .well-known files.
+        .mount(
+            "/.well-known",
+            FileServer::from(relative!("static/.well-known")).rank(-2),
+        )
 }
